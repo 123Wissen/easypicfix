@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Share your feedback about ImageTools. Help us improve our services with your suggestions and comments.">
+    <meta name="keywords" content="feedback, suggestions, comments, user experience, improvement">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+
+    <style>
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .rating label:hover,
+        .rating label:hover ~ label,
+        .rating input:checked ~ label {
+            color: var(--bs-warning);
+        }
+
+        .feedback-type {
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .feedback-type:hover {
+            border-color: var(--bs-primary);
+            background: rgba(var(--bs-primary-rgb), 0.05);
+        }
+
+        .feedback-type input[type="radio"] {
+            display: none;
+        }
+
+        .feedback-type input[type="radio"]:checked + label {
+            color: var(--bs-primary);
+        }
+
+        .feedback-type input[type="radio"]:checked + label i {
+            transform: scale(1.2);
+        }
+
+        .feedback-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .satisfaction-option {
+            text-align: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .satisfaction-option:hover {
+            background: rgba(var(--bs-primary-rgb), 0.05);
+            transform: translateY(-5px);
+        }
+
+        .satisfaction-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .very-satisfied { color: #28a745; }
+        .satisfied { color: #17a2b8; }
+        .neutral { color: #ffc107; }
+        .unsatisfied { color: #fd7e14; }
+        .very-unsatisfied { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <!-- Page Title -->
+                <div class="text-center mb-5">
+                    <h1 class="display-4 mb-3">Your Feedback Matters</h1>
+                    <p class="lead text-muted">Help us improve ImageTools with your valuable feedback</p>
+                </div>
+
+                <!-- Feedback Form -->
+                <div class="card">
+                    <div class="card-body p-4 p-md-5">
+                        <form id="feedback-form">
+                            <!-- Overall Rating -->
+                            <div class="text-center mb-5">
+                                <h4 class="mb-3">How would you rate your experience?</h4>
+                                <div class="rating">
+                                    <input type="radio" name="rating" id="star5" value="5">
+                                    <label for="star5" class="fas fa-star"></label>
+                                    <input type="radio" name="rating" id="star4" value="4">
+                                    <label for="star4" class="fas fa-star"></label>
+                                    <input type="radio" name="rating" id="star3" value="3">
+                                    <label for="star3" class="fas fa-star"></label>
+                                    <input type="radio" name="rating" id="star2" value="2">
+                                    <label for="star2" class="fas fa-star"></label>
+                                    <input type="radio" name="rating" id="star1" value="1">
+                                    <label for="star1" class="fas fa-star"></label>
+                                </div>
+                            </div>
+
+                            <!-- Satisfaction Level -->
+                            <div class="mb-5">
+                                <h4 class="text-center mb-4">How satisfied are you with our tools?</h4>
+                                <div class="row g-3">
+                                    <div class="col">
+                                        <div class="satisfaction-option">
+                                            <i class="far fa-grin-stars satisfaction-icon very-satisfied"></i>
+                                            <div>Very Satisfied</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="satisfaction-option">
+                                            <i class="far fa-smile satisfaction-icon satisfied"></i>
+                                            <div>Satisfied</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="satisfaction-option">
+                                            <i class="far fa-meh satisfaction-icon neutral"></i>
+                                            <div>Neutral</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="satisfaction-option">
+                                            <i class="far fa-frown satisfaction-icon unsatisfied"></i>
+                                            <div>Unsatisfied</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="satisfaction-option">
+                                            <i class="far fa-angry satisfaction-icon very-unsatisfied"></i>
+                                            <div>Very Unsatisfied</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feedback Type -->
+                            <div class="mb-5">
+                                <h4 class="text-center mb-4">What type of feedback do you have?</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="feedback-type text-center">
+                                            <input type="radio" name="feedback-type" id="suggestion" value="suggestion">
+                                            <label for="suggestion">
+                                                <i class="fas fa-lightbulb feedback-icon text-warning"></i>
+                                                <h5>Suggestion</h5>
+                                                <p class="text-muted mb-0">Share your ideas for improvement</p>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="feedback-type text-center">
+                                            <input type="radio" name="feedback-type" id="issue" value="issue">
+                                            <label for="issue">
+                                                <i class="fas fa-exclamation-circle feedback-icon text-danger"></i>
+                                                <h5>Issue</h5>
+                                                <p class="text-muted mb-0">Report a problem or bug</p>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="feedback-type text-center">
+                                            <input type="radio" name="feedback-type" id="compliment" value="compliment">
+                                            <label for="compliment">
+                                                <i class="fas fa-heart feedback-icon text-success"></i>
+                                                <h5>Compliment</h5>
+                                                <p class="text-muted mb-0">Tell us what you love</p>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feedback Details -->
+                            <div class="mb-4">
+                                <h4 class="text-center mb-4">Tell us more</h4>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="feedback-title" placeholder="Feedback Title" required>
+                                    <label for="feedback-title">Feedback Title</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" id="feedback-details" style="height: 150px" placeholder="Your Feedback" required></textarea>
+                                    <label for="feedback-details">Your Feedback</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="email" placeholder="Your Email (optional)">
+                                    <label for="email">Your Email (optional)</label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+
+            // Handle form submission
+            document.getElementById('feedback-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add your form submission logic here
+                alert('Thank you for your feedback! We appreciate your input.');
+                e.target.reset();
+            });
+
+            // Handle satisfaction option selection
+            document.querySelectorAll('.satisfaction-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.satisfaction-option').forEach(opt => {
+                        opt.style.background = 'transparent';
+                    });
+                    option.style.background = 'rgba(var(--bs-primary-rgb), 0.05)';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

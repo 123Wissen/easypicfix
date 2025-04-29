@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Crop your images with precision. Interactive cropping tool with aspect ratio control and preview. Support for JPG, PNG, WebP formats.">
+    <meta name="keywords" content="image cropper, crop tool, image editor, crop image online, resize image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Cropperjs CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Image Cropper</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5" id="upload-area">
+                                <input type="file" id="image-input" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none;">
+                                <i class="fas fa-crop-alt fa-3x mb-3 animate__animated animate__bounceIn"></i>
+                                <h4>Drag & Drop Your Image Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose File
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP</p>
+                                <p class="mt-2 small text-muted">Maximum file size: 10MB</p>
+                            </div>
+                        </div>
+
+                        <!-- Crop Settings -->
+                        <div class="crop-settings mb-4" style="display: none;">
+                            <h5>Crop Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Aspect Ratio</label>
+                                    <select class="form-select" id="aspect-ratio">
+                                        <option value="free">Free</option>
+                                        <option value="1:1">Square (1:1)</option>
+                                        <option value="4:3">Standard (4:3)</option>
+                                        <option value="16:9">Widescreen (16:9)</option>
+                                        <option value="2:3">Portrait (2:3)</option>
+                                        <option value="3:2">Landscape (3:2)</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 custom-ratio" style="display: none;">
+                                    <label class="form-label">Custom Ratio</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="ratio-x" placeholder="Width" min="1">
+                                        <span class="input-group-text">:</span>
+                                        <input type="number" class="form-control" id="ratio-y" placeholder="Height" min="1">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Output Format</label>
+                                                <select class="form-select" id="output-format">
+                                        <option value="same">Same as input</option>
+                                        <option value="jpg">JPG</option>
+                                                    <option value="png">PNG</option>
+                                                    <option value="webp">WebP</option>
+                                                </select>
+                                            </div>
+                                <div class="col-md-6">
+                                                <label class="form-label">Quality</label>
+                                                    <input type="range" class="form-range" id="quality" min="1" max="100" value="90">
+                                    <div class="text-center"><span id="quality-value">90</span>%</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section mb-4" style="display: none;">
+                            <h5>Preview</h5>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="crop-container">
+                                        <img id="preview-image" class="img-fluid">
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button class="btn btn-outline-secondary" id="rotate-left">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" id="rotate-right">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" id="flip-h">
+                                            <i class="fas fa-arrows-alt-h"></i>
+                                        </button>
+                                        <button class="btn btn-outline-secondary" id="flip-v">
+                                            <i class="fas fa-arrows-alt-v"></i>
+                                            </button>
+                                        <button class="btn btn-outline-secondary" id="reset">
+                                            <i class="fas fa-sync"></i>
+                                            </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                        <!-- Action Buttons -->
+                        <div id="action-buttons" class="text-center mt-4" style="display: none;">
+                            <button class="btn btn-success btn-lg animate__animated animate__pulse animate__infinite" id="crop-btn">
+                                <i class="fas fa-crop me-2"></i>Crop Image
+                            </button>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Processing image...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Cropperjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { ImageCropper } from '../../js/image-cropper.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const cropper = new ImageCropper({
+                inputElement: '#image-input',
+                previewElement: '#preview-image',
+                aspectRatioElement: '#aspect-ratio',
+                ratioXElement: '#ratio-x',
+                ratioYElement: '#ratio-y',
+                outputFormatElement: '#output-format',
+                qualityElement: '#quality',
+                qualityValueElement: '#quality-value',
+                rotateLeftButton: '#rotate-left',
+                rotateRightButton: '#rotate-right',
+                flipHButton: '#flip-h',
+                flipVButton: '#flip-v',
+                resetButton: '#reset',
+                cropButton: '#crop-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Handle aspect ratio change
+            document.querySelector('#aspect-ratio').addEventListener('change', (e) => {
+                const customRatio = document.querySelector('.custom-ratio');
+                customRatio.style.display = e.target.value === 'custom' ? 'block' : 'none';
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .upload-area:hover,
+    .upload-area.border-primary {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .crop-container {
+        max-height: 600px;
+        overflow: hidden;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .crop-container img {
+        max-width: 100%;
+        max-height: 600px;
+    }
+
+    /* Cropper.js customization */
+    .cropper-view-box,
+    .cropper-face {
+        border-radius: 0;
+    }
+
+    .cropper-line,
+    .cropper-point {
+        background-color: var(--bs-primary);
+    }
+
+    .cropper-bg {
+        background-image: linear-gradient(45deg, #f3f3f3 25%, transparent 25%),
+                          linear-gradient(-45deg, #f3f3f3 25%, transparent 25%),
+                          linear-gradient(45deg, transparent 75%, #f3f3f3 75%),
+                          linear-gradient(-45deg, transparent 75%, #f3f3f3 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    /* Dark Mode */
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+        background-color: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .dark-mode .form-control:focus,
+    .dark-mode .form-select:focus {
+        background-color: #2d2d2d;
+        border-color: var(--bs-primary);
+    }
+
+    .dark-mode .crop-container {
+        background-color: #2d2d2d;
+    }
+
+    .dark-mode .cropper-bg {
+        background-image: linear-gradient(45deg, #333 25%, transparent 25%),
+                          linear-gradient(-45deg, #333 25%, transparent 25%),
+                          linear-gradient(45deg, transparent 75%, #333 75%),
+                          linear-gradient(-45deg, transparent 75%, #333 75%);
+    }
+
+    .dark-mode .btn-outline-secondary {
+        color: rgba(255, 255, 255, 0.8);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .dark-mode .btn-outline-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    </style>
+</body>
+</html> 

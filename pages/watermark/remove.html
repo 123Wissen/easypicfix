@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Watermark - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            background: #fff;
+        }
+
+        .card-header {
+            background: none;
+            border-bottom: none;
+            padding: 25px;
+        }
+
+        .card-header h1 {
+            font-size: 28px;
+            color: #2d3436;
+            text-align: center;
+            margin: 0;
+        }
+
+        .upload-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #4169E1;
+            background: #f0f2ff;
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #4169E1;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .upload-area h3 {
+            color: #2d3436;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #636e72;
+            margin: 10px 0;
+        }
+
+        .btn-choose-files {
+            background: #4169E1;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+        }
+
+        .btn-choose-files:hover {
+            background: #3151b5;
+            transform: translateY(-2px);
+        }
+
+        .supported-formats {
+            color: #636e72;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .settings-section {
+            display: none;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .settings-section h4 {
+            color: #2d3436;
+            margin-bottom: 20px;
+        }
+
+        .setting-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .setting-item label {
+            color: #2d3436;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .setting-item .description {
+            color: #636e72;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .form-range {
+            width: 100%;
+        }
+
+        .form-range::-webkit-slider-thumb {
+            background: #4169E1;
+        }
+
+        .form-range::-moz-range-thumb {
+            background: #4169E1;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+            background: #fff;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: #4169E1;
+            color: white;
+            border-color: #4169E1;
+        }
+
+        .processing-progress {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress {
+            height: 8px;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background-color: #4169E1;
+        }
+
+        .processing-status {
+            color: #636e72;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .preview-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .preview-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .file-info {
+            color: #636e72;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .btn-process {
+            background: #4169E1;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-process:hover {
+            background: #3151b5;
+        }
+
+        .btn-download {
+            background: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .btn-download:hover {
+            background: #219a52;
+        }
+
+        .selection-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        #selectionCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+        }
+
+        .watermark-selection {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #dfe6e9;
+        }
+
+        .watermark-selection p {
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+
+        .selection-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .selection-btn {
+            flex: 1;
+            padding: 8px 15px;
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+            background: #fff;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .selection-btn:hover {
+            background: #f0f2ff;
+            border-color: #4169E1;
+        }
+
+        .selection-btn.confirm {
+            background: #4169E1;
+            color: white;
+            border-color: #4169E1;
+        }
+
+        .selection-btn.confirm:hover {
+            background: #3151b5;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4169E1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .canvas-container {
+            position: relative;
+            margin: 20px 0;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        #imageCanvas {
+            max-width: 100%;
+            cursor: crosshair;
+        }
+
+        .watermark-controls {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .type-btn.active {
+            background: #4169E1;
+            color: white;
+            border-color: #4169E1;
+        }
+
+        .range-control {
+            width: 100%;
+        }
+
+        .selection-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn-remove-selected {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            background: #4169E1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-remove-selected:hover {
+            background: #3151b5;
+        }
+
+        .btn-reset {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-reset:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="upload-container">
+            <h1 class="text-center mb-4">Remove Watermark</h1>
+            
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt fa-3x mb-3" style="color: #4169E1;"></i>
+                <h3>Drag & Drop Image Here</h3>
+                                <p>or</p>
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    Choose File
+                                </button>
+                <input type="file" id="fileInput" accept="image/*" style="display: none">
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP</p>
+                        </div>
+
+            <div id="previewSection" style="display: none;">
+                <div class="canvas-container">
+                    <canvas id="imageCanvas"></canvas>
+                                </div>
+
+                <div class="watermark-controls">
+                    <div class="control-group">
+                        <label>Watermark Type</label>
+                        <div class="type-selector">
+                            <button class="type-btn active" data-type="text">Text Watermark</button>
+                            <button class="type-btn" data-type="image">Image Watermark</button>
+                            </div>
+                        </div>
+
+                    <div class="control-group">
+                        <label>Opacity Threshold</label>
+                        <input type="range" class="range-control" id="opacityThreshold" min="0" max="100" value="50">
+                        <div class="selection-info">
+                            Drag to select the watermark area on the image
+                        </div>
+                    </div>
+
+                    <button class="btn-remove-selected" id="removeWatermarkBtn">
+                        Remove Selected Watermark
+                    </button>
+                    <button class="btn-reset" id="resetBtn">
+                        Reset Selection
+                    </button>
+                </div>
+
+                <button id="downloadBtn" class="btn-download" style="display: none;">
+                    Download Image
+                </button>
+            </div>
+
+            <div id="loading">
+                <div class="spinner"></div>
+                <p class="mt-2">Removing watermark...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        let isDrawing = false;
+        let startX, startY;
+        let selectedArea = null;
+        let originalImageData = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+            initializeUploader();
+        });
+
+        function loadComponents() {
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        }
+
+        function initializeUploader() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const previewSection = document.getElementById('previewSection');
+            const canvas = document.getElementById('imageCanvas');
+            const ctx = canvas.getContext('2d');
+            const removeWatermarkBtn = document.getElementById('removeWatermarkBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loading = document.getElementById('loading');
+            const resetBtn = document.getElementById('resetBtn');
+            const typeButtons = document.querySelectorAll('.type-btn');
+            const opacityThreshold = document.getElementById('opacityThreshold');
+
+            let watermarkType = 'text';
+
+            typeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    typeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    watermarkType = btn.dataset.type;
+                });
+            });
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            function startDrawing(e) {
+                isDrawing = true;
+                const rect = canvas.getBoundingClientRect();
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                const currentX = e.clientX - rect.left;
+                const currentY = e.clientY - rect.top;
+
+                // Clear previous rectangle
+                ctx.putImageData(originalImageData, 0, 0);
+
+                // Draw new selection rectangle
+                ctx.strokeStyle = '#4169E1';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([6]);
+                
+                const width = currentX - startX;
+                const height = currentY - startY;
+                
+                ctx.strokeRect(startX, startY, width, height);
+                
+                selectedArea = {
+                    x: Math.min(startX, currentX),
+                    y: Math.min(startY, currentY),
+                    width: Math.abs(width),
+                    height: Math.abs(height)
+                };
+            }
+
+            function stopDrawing() {
+                isDrawing = false;
+            }
+
+            resetBtn.addEventListener('click', () => {
+                if (originalImageData) {
+                    ctx.putImageData(originalImageData, 0, 0);
+                    selectedArea = null;
+                }
+            });
+
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#4169E1';
+                uploadArea.style.background = '#f0f2ff';
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.background = '#f8f9fa';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.background = '#f8f9fa';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+
+            removeWatermarkBtn.addEventListener('click', async () => {
+                if (!selectedArea) {
+                    alert('Please select the watermark area first');
+                    return;
+                }
+
+                loading.style.display = 'block';
+                removeWatermarkBtn.style.display = 'none';
+
+                try {
+                    await removeWatermark(canvas, selectedArea, watermarkType, opacityThreshold.value);
+                    downloadBtn.style.display = 'block';
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error removing watermark. Please try again.');
+                } finally {
+                    loading.style.display = 'none';
+                }
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.download = 'watermark-removed.png';
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            });
+
+            function handleFileSelect(e) {
+                const files = e.target.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            }
+
+            function handleFile(file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        uploadArea.style.display = 'none';
+                        previewSection.style.display = 'block';
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            async function removeWatermark(canvas, area, type, opacity) {
+                const ctx = canvas.getContext('2d');
+                const imageData = ctx.getImageData(area.x, area.y, area.width, area.height);
+                const data = imageData.data;
+                const threshold = opacity / 100;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const a = data[i + 3] / 255;
+
+                    if (type === 'text') {
+                        // For text watermarks, look for consistent color patterns
+                        const brightness = (r + g + b) / 3 / 255;
+                        if (Math.abs(brightness - threshold) < 0.2) {
+                            // Sample surrounding pixels
+                            const x = (i / 4) % area.width;
+                            const y = Math.floor((i / 4) / area.width);
+                            let sumR = 0, sumG = 0, sumB = 0, count = 0;
+
+                            for (let dy = -5; dy <= 5; dy++) {
+                                for (let dx = -5; dx <= 5; dx++) {
+                                    const sx = x + dx;
+                                    const sy = y + dy;
+                                    if (sx >= 0 && sx < area.width && sy >= 0 && sy < area.height) {
+                                        const si = (sy * area.width + sx) * 4;
+                                        const sr = data[si];
+                                        const sg = data[si + 1];
+                                        const sb = data[si + 2];
+                                        const sa = data[si + 3] / 255;
+                                        
+                                        if (Math.abs((sr + sg + sb) / 3 / 255 - threshold) >= 0.2) {
+                                            sumR += sr;
+                                            sumG += sg;
+                                            sumB += sb;
+                                            count++;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (count > 0) {
+                                data[i] = sumR / count;
+                                data[i + 1] = sumG / count;
+                                data[i + 2] = sumB / count;
+                            }
+                        }
+                    } else {
+                        // For image watermarks, use opacity threshold
+                        if (a <= threshold) {
+                            // Sample surrounding non-transparent pixels
+                            const x = (i / 4) % area.width;
+                            const y = Math.floor((i / 4) / area.width);
+                            let sumR = 0, sumG = 0, sumB = 0, count = 0;
+
+                            for (let dy = -3; dy <= 3; dy++) {
+                                for (let dx = -3; dx <= 3; dx++) {
+                                    const sx = x + dx;
+                                    const sy = y + dy;
+                                    if (sx >= 0 && sx < area.width && sy >= 0 && sy < area.height) {
+                                        const si = (sy * area.width + sx) * 4;
+                                        const sa = data[si + 3] / 255;
+                                        if (sa > threshold) {
+                                            sumR += data[si];
+                                            sumG += data[si + 1];
+                                            sumB += data[si + 2];
+                                            count++;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (count > 0) {
+                                data[i] = sumR / count;
+                                data[i + 1] = sumG / count;
+                                data[i + 2] = sumB / count;
+                                data[i + 3] = 255;
+                            }
+                        }
+                    }
+                }
+
+                ctx.putImageData(imageData, area.x, area.y);
+            }
+        }
+    </script>
+</body>
+</html> 

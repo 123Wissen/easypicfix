@@ -1,0 +1,115 @@
+<!-- Modern Footer -->
+<footer class="footer py-5 mt-5">
+    <div class="container">
+        <!-- Main Footer -->
+        <div class="row g-4 mb-5">
+            <!-- Brand Section -->
+            <div class="col-lg-4 pe-lg-5">
+                <div class="footer-brand d-flex align-items-center mb-4">
+                    <div class="brand-icon me-2">
+                        <i class="fas fa-image text-gradient"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="text-gradient">Image</span>Tools
+                    </div>
+                </div>
+                <p class="text-muted mb-4">Transform your images with our professional suite of tools. Convert, compress, and enhance your images with just a few clicks.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-6 col-md-3 col-lg-2">
+                <h6 class="footer-title mb-4">Quick Links</h6>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="/pages/convert/jpg-to-png.html">Convert</a></li>
+                    <li><a href="/pages/edit/resize.html">Edit</a></li>
+                    <li><a href="/pages/compress/single.html">Compress</a></li>
+                    <li><a href="/pages/effects/filters.html">Effects</a></li>
+                </ul>
+            </div>
+
+            <!-- Tools -->
+            <div class="col-6 col-md-3 col-lg-2">
+                <h6 class="footer-title mb-4">Tools</h6>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="/pages/convert/pdf-to-image.html">PDF Tools</a></li>
+                    <li><a href="/pages/batch/convert.html">Batch Convert</a></li>
+                    <li><a href="/pages/watermark/add.html">Watermark</a></li>
+                    <li><a href="/pages/compress/bulk.html">Bulk Compress</a></li>
+                </ul>
+            </div>
+
+            <!-- Support -->
+            <div class="col-6 col-md-3 col-lg-2">
+                <h6 class="footer-title mb-4">Support</h6>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="/pages/support/help-center.html">Help Center</a></li>
+                    <li><a href="/pages/support/contact-us.html">Contact Us</a></li>
+                    <li><a href="/pages/support/feedback.html">Feedback</a></li>
+                    <li><a href="/pages/support/faq.html">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="bottom-footer pt-4 mt-4 border-top">
+            <div class="row align-items-center">
+                <div class="col-md-12 text-center">
+                    <p class="copyright mb-0" style="color: #000;">
+                        &copy; <span class="current-year">2024</span> ImageTools. All rights reserved.
+                        <a href="https://wissentechs.com" target="_blank">wissen technologies</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .footer {
+        background: #f8f9fa;
+    }
+
+    .text-gradient {
+        background: linear-gradient(45deg, #2196F3, #00BCD4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .footer-title {
+        color: #333;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+        color: #666;
+        text-decoration: none;
+    }
+
+    .footer-links a:hover {
+        color: var(--bs-primary);
+    }
+
+    @media (max-width: 768px) {
+        .footer-title {
+            text-align: center;
+        }
+        .footer-links {
+            text-align: center;
+        }
+    }
+    </style>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearElements = document.querySelectorAll('.current-year');
+        const currentYear = new Date().getFullYear();
+        yearElements.forEach(element => {
+            element.textContent = currentYear;
+        });
+    });
+    </script>
+</footer>

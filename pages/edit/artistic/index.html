@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artistic Effects - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0 text-center py-4">
+                        <h1 class="h3 mb-3 text-gradient">Artistic Effects</h1>
+                        <p class="text-muted mb-0">Transform your images with artistic styles and effects</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="image-input" accept="image/*" style="display:none;">
+                                <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
+                                <h4>Drag & Drop Your Image Here</h4>
+                                <p class="text-muted">or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose File
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP</p>
+                            </div>
+                        </div>
+
+                        <!-- Effect Settings -->
+                        <div class="effect-settings mb-4" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card p-3">
+                                        <h5 class="mb-3">Effect Categories</h5>
+                                        <div class="nav flex-column nav-pills" role="tablist">
+                                            <button class="nav-link active mb-2" data-bs-toggle="pill" data-bs-target="#painting-effects">
+                                                <i class="fas fa-paint-brush me-2"></i>Painting Effects
+                                            </button>
+                                            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#sketch-effects">
+                                                <i class="fas fa-pencil-alt me-2"></i>Sketch Effects
+                                            </button>
+                                            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#abstract-effects">
+                                                <i class="fas fa-shapes me-2"></i>Abstract Effects
+                                            </button>
+                                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#texture-effects">
+                                                <i class="fas fa-layer-group me-2"></i>Texture Effects
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card p-3 mt-3">
+                                        <h5 class="mb-3">Effect Settings</h5>
+                                        <div class="mb-3">
+                                            <label class="form-label d-flex justify-content-between">
+                                                Intensity
+                                                <span id="intensity-value">50%</span>
+                                            </label>
+                                            <input type="range" class="form-range" id="intensity" min="1" max="100" value="50">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label d-flex justify-content-between">
+                                                Detail Level
+                                                <span id="detail-value">50%</span>
+                                            </label>
+                                            <input type="range" class="form-range" id="detail" min="1" max="100" value="50">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="preserve-colors" checked>
+                                                <label class="form-check-label" for="preserve-colors">
+                                                    Preserve Original Colors
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-8">
+                                    <div class="card p-3">
+                                        <div class="tab-content">
+                                            <!-- Painting Effects -->
+                                            <div class="tab-pane fade show active" id="painting-effects">
+                                                <h5 class="mb-3">Painting Effects</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="oil-painting">
+                                                            <img src="#" class="effect-preview mb-2" alt="Oil Painting">
+                                                            <p class="mb-0">Oil Painting</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="watercolor">
+                                                            <img src="#" class="effect-preview mb-2" alt="Watercolor">
+                                                            <p class="mb-0">Watercolor</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="acrylic">
+                                                            <img src="#" class="effect-preview mb-2" alt="Acrylic">
+                                                            <p class="mb-0">Acrylic</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="impasto">
+                                                            <img src="#" class="effect-preview mb-2" alt="Impasto">
+                                                            <p class="mb-0">Impasto</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Sketch Effects -->
+                                            <div class="tab-pane fade" id="sketch-effects">
+                                                <h5 class="mb-3">Sketch Effects</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="pencil">
+                                                            <img src="#" class="effect-preview mb-2" alt="Pencil">
+                                                            <p class="mb-0">Pencil</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="charcoal">
+                                                            <img src="#" class="effect-preview mb-2" alt="Charcoal">
+                                                            <p class="mb-0">Charcoal</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="ink">
+                                                            <img src="#" class="effect-preview mb-2" alt="Ink">
+                                                            <p class="mb-0">Ink</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="crosshatch">
+                                                            <img src="#" class="effect-preview mb-2" alt="Crosshatch">
+                                                            <p class="mb-0">Crosshatch</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Abstract Effects -->
+                                            <div class="tab-pane fade" id="abstract-effects">
+                                                <h5 class="mb-3">Abstract Effects</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="cubism">
+                                                            <img src="#" class="effect-preview mb-2" alt="Cubism">
+                                                            <p class="mb-0">Cubism</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="pointillism">
+                                                            <img src="#" class="effect-preview mb-2" alt="Pointillism">
+                                                            <p class="mb-0">Pointillism</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="mosaic">
+                                                            <img src="#" class="effect-preview mb-2" alt="Mosaic">
+                                                            <p class="mb-0">Mosaic</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="geometric">
+                                                            <img src="#" class="effect-preview mb-2" alt="Geometric">
+                                                            <p class="mb-0">Geometric</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Texture Effects -->
+                                            <div class="tab-pane fade" id="texture-effects">
+                                                <h5 class="mb-3">Texture Effects</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="canvas">
+                                                            <img src="#" class="effect-preview mb-2" alt="Canvas">
+                                                            <p class="mb-0">Canvas</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="paper">
+                                                            <img src="#" class="effect-preview mb-2" alt="Paper">
+                                                            <p class="mb-0">Paper</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="grunge">
+                                                            <img src="#" class="effect-preview mb-2" alt="Grunge">
+                                                            <p class="mb-0">Grunge</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="effect-option text-center p-2" data-effect="scratched">
+                                                            <img src="#" class="effect-preview mb-2" alt="Scratched">
+                                                            <p class="mb-0">Scratched</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Preview Section -->
+                                    <div class="card p-3 mt-3">
+                                        <div class="preview-section">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h5 class="mb-0">Preview</h5>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-outline-secondary btn-sm" id="before-after-toggle">
+                                                        <i class="fas fa-columns me-2"></i>Before/After
+                                                    </button>
+                                                    <button class="btn btn-outline-secondary btn-sm" id="reset-effect">
+                                                        <i class="fas fa-undo me-2"></i>Reset
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="preview-container">
+                                                <div id="preview-image" class="preview-image-container"></div>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button class="btn btn-success btn-lg" id="apply-btn">
+                                                    <i class="fas fa-check me-2"></i>Apply Effect
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Applying effect...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { ArtisticEffects } from '../../../js/artistic-effects.js';
+        import ComponentLoader from '../../../js/component-loader.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const componentLoader = new ComponentLoader();
+            componentLoader.loadComponents();
+
+            const effects = new ArtisticEffects({
+                inputElement: '#image-input',
+                previewElement: '#preview-image',
+                beforeAfterToggle: '#before-after-toggle',
+                resetButton: '#reset-effect',
+                applyButton: '#apply-btn',
+                intensityElement: '#intensity',
+                intensityValueElement: '#intensity-value',
+                detailElement: '#detail',
+                detailValueElement: '#detail-value',
+                preserveColorsElement: '#preserve-colors',
+                effectOptions: '.effect-option',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .upload-area:hover {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .preview-container {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .preview-image-container {
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .preview-image-container img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+    }
+
+    .effect-option {
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .effect-option:hover {
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .effect-option.active {
+        background: rgba(var(--bs-primary-rgb), 0.1);
+        border: 1px solid var(--bs-primary);
+    }
+
+    .effect-preview {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .nav-pills .nav-link {
+        color: var(--bs-body-color);
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+
+    /* Dark Mode */
+    .dark-mode .preview-container,
+    .dark-mode .card {
+        background: #343a40;
+    }
+
+    .dark-mode .effect-option:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .effect-option.active {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--bs-primary);
+    }
+
+    .dark-mode .nav-pills .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    </style>
+</body>
+</html> 

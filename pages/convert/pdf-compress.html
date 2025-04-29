@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress PDF - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Compress PDF files efficiently while maintaining quality. Reduce PDF file size for easier sharing and storage.">
+    <meta name="keywords" content="pdf compression, compress pdf, reduce pdf size, pdf optimizer, pdf tools">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Compress PDF</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="pdf-input" accept=".pdf" multiple style="display:none;">
+                                <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                                <h4>Drag & Drop Your PDF Files Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('pdf-input').click()">
+                                    Choose Files
+                                </button>
+                                <p class="mt-3 text-muted">Supported format: PDF</p>
+                            </div>
+                        </div>
+
+                        <!-- Settings Section -->
+                        <div class="settings-section mb-4" style="display: none;">
+                            <h5>Compression Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Compression Level</label>
+                                    <select class="form-select" id="compression-level">
+                                        <option value="low">Low (Better Quality)</option>
+                                        <option value="medium" selected>Medium (Balanced)</option>
+                                        <option value="high">High (Smaller Size)</option>
+                                        <option value="maximum">Maximum Compression</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Image Quality</label>
+                                    <input type="range" class="form-range" id="image-quality" min="1" max="100" value="75">
+                                    <div class="text-center"><span id="quality-value">75</span>%</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Resolution (DPI)</label>
+                                    <select class="form-select" id="resolution">
+                                        <option value="72">72 DPI (Web)</option>
+                                        <option value="150" selected>150 DPI (Standard)</option>
+                                        <option value="300">300 DPI (Print)</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="optimize-images" checked>
+                                        <label class="form-check-label" for="optimize-images">
+                                            Optimize embedded images
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="remove-metadata" checked>
+                                        <label class="form-check-label" for="remove-metadata">
+                                            Remove metadata and annotations
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section" style="display: none;">
+                            <h5>Files to Compress</h5>
+                            <div id="pdf-preview" class="row g-3"></div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-success" id="compress-btn">
+                                    <i class="fas fa-compress me-2"></i>Compress PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Compressing PDF...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { PDFCompressor } from '../../js/pdf-compressor.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const compressor = new PDFCompressor({
+                inputElement: '#pdf-input',
+                previewElement: '#pdf-preview',
+                compressionLevelElement: '#compression-level',
+                imageQualityElement: '#image-quality',
+                qualityValueElement: '#quality-value',
+                resolutionElement: '#resolution',
+                optimizeImagesElement: '#optimize-images',
+                removeMetadataElement: '#remove-metadata',
+                compressButton: '#compress-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .upload-area:hover,
+    .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .preview-item {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .preview-item .remove-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .preview-item .remove-btn:hover {
+        background: rgba(255, 255, 255, 1);
+    }
+
+    .preview-item .file-info {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    /* Dark Mode */
+    .dark-mode .upload-area {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .dark-mode .upload-area:hover,
+    .dark-mode .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .preview-item .remove-btn {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+    }
+
+    .dark-mode .preview-item .remove-btn:hover {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    .dark-mode .preview-item .file-info {
+        color: #aaa;
+    }
+    </style>
+</body>
+</html> 

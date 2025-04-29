@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImageTools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <div class="brand-icon animate__animated animate__fadeIn">
+                    <i class="fas fa-image"></i>
+                </div>
+                <div class="brand-text ms-2 animate__animated animate__fadeIn">
+                    <span class="text-gradient">Image</span>Tools
+                </div>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Navigation Items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    
+                    <!-- Convert Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-exchange-alt me-1"></i>Convert
+                        </a>
+                        <div class="dropdown-menu mega-menu p-4">
+                            <div class="container">
+                                <div class="row g-4">
+                                    <div class="col-lg-4">
+                                        <h6 class="dropdown-header">Image Formats</h6>
+                                        <a class="dropdown-item" href="/pages/convert/jpg-to-png.html">
+                                            <i class="fas fa-exchange-alt me-2"></i>JPG to PNG
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/convert/png-to-jpg.html">
+                                            <i class="fas fa-exchange-alt me-2"></i>PNG to JPG
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/convert/webp-convert.html">
+                                            <i class="fas fa-exchange-alt me-2"></i>WebP Converter
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/convert/heic-to-jpg.html">
+                                            <i class="fas fa-exchange-alt me-2"></i>HEIC to JPG
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h6 class="dropdown-header">PDF Tools</h6>
+                                        <a class="dropdown-item" href="/pages/convert/pdf-to-image.html">
+                                            <i class="fas fa-file-pdf me-2"></i>PDF to Image
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/convert/image-to-pdf.html">
+                                            <i class="fas fa-file-image me-2"></i>Image to PDF
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/convert/pdf-compress.html">
+                                            <i class="fas fa-compress me-2"></i>Compress PDF
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="dropdown-banner p-4 rounded-3 text-center">
+                                            <i class="fas fa-magic fa-2x mb-3"></i>
+                                            <h6>Batch Processing</h6>
+                                            <p class="small mb-3">Convert multiple files at once</p>
+                                            <a href="/pages/batch/convert.html" class="btn btn-sm btn-primary">Try Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Edit Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-edit me-1"></i>Edit
+                        </a>
+                        <div class="dropdown-menu mega-menu p-4">
+                            <div class="container">
+                                <div class="row g-4">
+                                    <div class="col-lg-4">
+                                        <h6 class="dropdown-header">Basic Editing</h6>
+                                        <a class="dropdown-item" href="/pages/edit/resize.html">
+                                            <i class="fas fa-expand me-2"></i>Resize
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/edit/crop.html">
+                                            <i class="fas fa-crop me-2"></i>Crop
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/edit/rotate.html">
+                                            <i class="fas fa-redo me-2"></i>Rotate
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/edit/flip.html">
+                                            <i class="fas fa-exchange me-2"></i>Flip
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <h6 class="dropdown-header">Advanced Tools</h6>
+                                        <a class="dropdown-item" href="/pages/effects/filters.html">
+                                            <i class="fas fa-adjust me-2"></i>Filters
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/effects/artistic.html">
+                                            <i class="fas fa-paint-brush me-2"></i>Effects
+                                        </a>
+                                        <a class="dropdown-item" href="/pages/watermark/add.html">
+                                            <i class="fas fa-copyright me-2"></i>Watermark
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="dropdown-banner p-4 rounded-3 text-center">
+                                            <i class="fas fa-wand-magic-sparkles fa-2x mb-3"></i>
+                                            <h6>AI Enhancement</h6>
+                                            <p class="small mb-3">Enhance images with AI</p>
+                                            <a href="/pages/ai/enhance.html" class="btn btn-sm btn-primary">Try Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Compress Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-compress me-1"></i>Compress
+                        </a>
+                        <div class="dropdown-menu p-3">
+                            <a class="dropdown-item" href="/pages/compress/single.html">
+                                <i class="fas fa-file-image me-2"></i>Single Image
+                            </a>
+                            <a class="dropdown-item" href="/pages/compress/bulk.html">
+                                <i class="fas fa-images me-2"></i>Bulk Compress
+                            </a>
+                            <a class="dropdown-item" href="/pages/compress/advanced.html">
+                                <i class="fas fa-sliders-h me-2"></i>Advanced Options
+                            </a>
+                        </div>
+                    </li>
+
+                    <!-- Effects Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-magic me-1"></i>Effects
+                        </a>
+                        <div class="dropdown-menu p-3">
+                            <a class="dropdown-item" href="/pages/effects/filters.html">
+                                <i class="fas fa-filter me-2"></i>Filters
+                            </a>
+                            <a class="dropdown-item" href="/pages/effects/artistic.html">
+                                <i class="fas fa-palette me-2"></i>Artistic
+                            </a>
+                            <a class="dropdown-item" href="/pages/effects/frames.html">
+                                <i class="fas fa-square me-2"></i>Frames
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pages/about/index.html">
+                            <i class="fas fa-info-circle me-1"></i>About Us
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <style>
+    .navbar {
+        background: white;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-nav {
+        gap: 1.5rem; /* Add spacing between nav items */
+    }
+
+    .nav-item {
+        position: relative;
+    }
+
+    .brand-icon {
+        font-size: 1.5rem;
+        color: var(--bs-primary);
+    }
+
+    .brand-text {
+        font-weight: bold;
+        font-size: 1.25rem;
+    }
+
+    .text-gradient {
+        background: linear-gradient(45deg, #2196F3, #00BCD4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .navbar-nav .nav-link {
+        color: #666;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: var(--bs-primary);
+    }
+
+    .nav-link.dropdown-toggle {
+        padding-right: 1.5rem;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-radius: 1rem;
+    }
+
+    .mega-menu {
+        min-width: 600px;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(var(--bs-primary-rgb), 0.1);
+        transform: translateX(5px);
+    }
+
+    .dropdown-header {
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--bs-primary);
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    .dropdown-banner {
+        background: linear-gradient(45deg, rgba(33, 150, 243, 0.1), rgba(0, 188, 212, 0.1));
+    }
+
+    .dropdown-banner i {
+        color: var(--bs-primary);
+    }
+
+    @media (max-width: 992px) {
+        .mega-menu {
+            min-width: auto;
+        }
+    }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

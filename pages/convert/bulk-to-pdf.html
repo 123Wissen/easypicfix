@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Convert Images to PDF - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Convert multiple images to PDF format. Combine JPG, PNG, WebP images into a single PDF file with customizable options.">
+    <meta name="keywords" content="image to pdf, convert images to pdf, bulk pdf conversion, combine images to pdf, jpg to pdf, png to pdf">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Required Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+    
+    <!-- PDF-Lib -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <style>
+    .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .upload-area:hover,
+    .upload-area.drag-over {
+            border-color: #2196F3;
+            background: #e3f2fd;
+        }
+
+        .preview-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .settings-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .preview-item {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .preview-item .remove-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .preview-item .remove-btn:hover {
+        background: rgba(255, 255, 255, 1);
+    }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="text-center mb-4">Bulk Image to PDF Converter</h1>
+                <p class="text-center text-muted mb-5">Convert multiple images into a single PDF document with our easy-to-use bulk converter.</p>
+
+                <!-- Upload Area -->
+                <div class="upload-area mb-4" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                    <h4>Drag & Drop Multiple Images Here</h4>
+                    <p class="text-muted">or</p>
+                    <input type="file" id="fileInput" multiple accept="image/*" style="display: none">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        Choose Images
+                    </button>
+                    <p class="mt-2 text-muted">You can select multiple images at once</p>
+                </div>
+
+                <!-- Preview Area -->
+                <div id="previewArea" class="text-center mb-4" style="display: none;">
+                    <h5 class="mb-3">Selected Images (<span id="imageCount">0</span>)</h5>
+                    <div id="imagePreview" class="d-flex flex-wrap justify-content-center gap-3"></div>
+                    <button class="btn btn-outline-danger mt-3" onclick="clearSelection()">
+                        <i class="fas fa-trash-alt"></i> Clear Selection
+                    </button>
+                </div>
+
+                <!-- Settings -->
+                <div class="settings-card mb-4" id="settingsArea" style="display: none;">
+                    <h5 class="mb-3">PDF Settings</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Page Size</label>
+                            <select class="form-select" id="pageSize">
+                                <option value="A4">A4</option>
+                                <option value="Letter">Letter</option>
+                                <option value="Legal">Legal</option>
+                                <option value="A3">A3</option>
+                                <option value="A5">A5</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Orientation</label>
+                            <select class="form-select" id="orientation">
+                                <option value="portrait">Portrait</option>
+                                <option value="landscape">Landscape</option>
+                                <option value="auto">Auto (Based on Image)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Image Quality</label>
+                            <select class="form-select" id="imageQuality">
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Images per Page</label>
+                            <select class="form-select" id="imagesPerPage">
+                                <option value="1">1 Image</option>
+                                <option value="2">2 Images</option>
+                                <option value="4">4 Images</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Margin (mm)</label>
+                            <input type="number" class="form-control" id="margin" min="0" max="50" value="10">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="optimizePdf" checked>
+                                <label class="form-check-label" for="optimizePdf">
+                                    Optimize PDF size
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg px-5" id="convertBtn" style="display: none;">
+                        <i class="fas fa-file-pdf me-2"></i>Convert to PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Component Loader -->
+    <script>
+        // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            // Load footer
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <!-- Custom JS -->
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewArea = document.getElementById('previewArea');
+        const imagePreview = document.getElementById('imagePreview');
+        const settingsArea = document.getElementById('settingsArea');
+        const convertBtn = document.getElementById('convertBtn');
+        const imageCountSpan = document.getElementById('imageCount');
+        let selectedFiles = [];
+
+        // Clear selection function
+        function clearSelection() {
+            selectedFiles = [];
+            imagePreview.innerHTML = '';
+            imageCountSpan.textContent = '0';
+            previewArea.style.display = 'none';
+            settingsArea.style.display = 'none';
+            convertBtn.style.display = 'none';
+            fileInput.value = '';
+        }
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#2196F3';
+            uploadArea.style.background = '#e3f2fd';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.background = '#f8f9fa';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.background = '#f8f9fa';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            if (newFiles.length === 0) {
+                alert('Please select valid image files (JPG, PNG, or WebP).');
+                return;
+            }
+
+            // Add new files to existing selection
+            selectedFiles = [...selectedFiles, ...newFiles];
+            imageCountSpan.textContent = selectedFiles.length;
+            
+            // Clear preview area
+            imagePreview.innerHTML = '';
+            
+            // Show preview for all selected files
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const container = document.createElement('div');
+                    container.className = 'position-relative';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-image';
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 m-1';
+                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    removeBtn.onclick = () => {
+                        selectedFiles.splice(index, 1);
+                        container.remove();
+                        imageCountSpan.textContent = selectedFiles.length;
+                        if (selectedFiles.length === 0) {
+                            clearSelection();
+                        }
+                    };
+                    
+                    container.appendChild(img);
+                    container.appendChild(removeBtn);
+                    imagePreview.appendChild(container);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            previewArea.style.display = 'block';
+            settingsArea.style.display = 'block';
+            convertBtn.style.display = 'inline-block';
+        }
+
+        convertBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) {
+                alert('Please select at least one image.');
+                return;
+            }
+
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                const pageSize = document.getElementById('pageSize').value;
+                const orientation = document.getElementById('orientation').value;
+                const imagesPerPage = parseInt(document.getElementById('imagesPerPage').value);
+                
+                // Process images in groups based on imagesPerPage
+                for (let i = 0; i < selectedFiles.length; i += imagesPerPage) {
+                    const pageImages = selectedFiles.slice(i, i + imagesPerPage);
+                    const page = pdfDoc.addPage(PDFLib.PageSizes[pageSize]);
+                    
+                    if (orientation === 'landscape') {
+                        page.setRotation(PDFLib.degrees(90));
+                    }
+                    
+                    const { width, height } = page.getSize();
+                    
+                    // Calculate layout based on number of images
+                    const layout = imagesPerPage === 1 ? [1, 1] :
+                                 imagesPerPage === 2 ? [2, 1] : [2, 2];
+                    
+                    const cellWidth = width / layout[0];
+                    const cellHeight = height / layout[1];
+                    
+                    // Add each image to the page
+                    for (let j = 0; j < pageImages.length; j++) {
+                        const file = pageImages[j];
+                        const imageBytes = await file.arrayBuffer();
+                        let image;
+                        
+                        if (file.type === 'image/jpeg') {
+                            image = await pdfDoc.embedJpg(imageBytes);
+                        } else if (file.type === 'image/png') {
+                            image = await pdfDoc.embedPng(imageBytes);
+                        }
+                        
+                        const row = Math.floor(j / layout[0]);
+                        const col = j % layout[0];
+                        
+                        const scale = Math.min(
+                            cellWidth / image.width,
+                            cellHeight / image.height
+                        ) * 0.9; // 90% of cell size to add margin
+                        
+                        const x = col * cellWidth + (cellWidth - image.width * scale) / 2;
+                        const y = height - (row + 1) * cellHeight + (cellHeight - image.height * scale) / 2;
+                        
+                        page.drawImage(image, {
+                            x,
+                            y,
+                            width: image.width * scale,
+                            height: image.height * scale
+                        });
+                    }
+                }
+
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'converted-images.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '<i class="fas fa-file-pdf me-2"></i>Convert to PDF';
+            } catch (error) {
+                console.error('Error converting to PDF:', error);
+                alert('Error converting images to PDF. Please try again.');
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '<i class="fas fa-file-pdf me-2"></i>Convert to PDF';
+            }
+        });
+    </script>
+</body>
+</html> 

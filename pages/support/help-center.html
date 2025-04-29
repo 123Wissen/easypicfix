@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Get help with ImageTools. Find tutorials, guides, and answers to common questions about our image processing tools.">
+    <meta name="keywords" content="imagetools help, image editing help, image conversion help, user guide">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+
+    <style>
+        .help-category {
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .help-category:hover {
+            transform: translateY(-5px);
+        }
+
+        .help-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--bs-primary);
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .popular-topics {
+            background: rgba(var(--bs-primary-rgb), 0.05);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+        }
+
+        .topic-link {
+            display: block;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topic-link:hover {
+            background: rgba(var(--bs-primary-rgb), 0.1);
+            transform: translateX(5px);
+        }
+
+        .topic-link i {
+            margin-right: 0.5rem;
+            color: var(--bs-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <!-- Search Section -->
+        <div class="search-box">
+            <div class="input-group">
+                <input type="text" class="form-control form-control-lg" placeholder="Search help articles...">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Help Categories -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100 help-category">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book help-icon"></i>
+                        <h4>Getting Started</h4>
+                        <p class="text-muted">New to ImageTools? Learn the basics and get started quickly.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 help-category">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tools help-icon"></i>
+                        <h4>Tools Guide</h4>
+                        <p class="text-muted">Detailed guides for each image processing tool.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 help-category">
+                    <div class="card-body text-center">
+                        <i class="fas fa-question-circle help-icon"></i>
+                        <h4>Troubleshooting</h4>
+                        <p class="text-muted">Solutions to common issues and problems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Topics -->
+        <div class="popular-topics mb-5">
+            <h3 class="mb-4">Popular Topics</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="#" class="topic-link">
+                        <i class="fas fa-image"></i>
+                        How to convert images between formats
+                    </a>
+                    <a href="#" class="topic-link">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                        Image compression guidelines
+                    </a>
+                    <a href="#" class="topic-link">
+                        <i class="fas fa-crop"></i>
+                        Batch processing multiple images
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" class="topic-link">
+                        <i class="fas fa-magic"></i>
+                        Using AI enhancement features
+                    </a>
+                    <a href="#" class="topic-link">
+                        <i class="fas fa-download"></i>
+                        Downloading and saving results
+                    </a>
+                    <a href="#" class="topic-link">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Troubleshooting upload issues
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Categories Grid -->
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5><i class="fas fa-exchange-alt text-primary me-2"></i>Image Conversion</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Converting JPG to PNG</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">HEIC to JPG conversion</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Batch format conversion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5><i class="fas fa-compress text-primary me-2"></i>Compression</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Image compression tips</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">PDF compression guide</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Bulk compression</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5><i class="fas fa-crop-alt text-primary me-2"></i>Editing Tools</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Image cropping guide</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Resizing images</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Rotating and flipping</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5><i class="fas fa-magic text-primary me-2"></i>Enhancement</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">AI image enhancement</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Color adjustment</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Noise reduction</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5><i class="fas fa-cog text-primary me-2"></i>Settings</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Account settings</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Dark mode</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Preferences</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5><i class="fas fa-shield-alt text-primary me-2"></i>Privacy & Security</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Data handling</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Privacy policy</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none">Security measures</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Still Need Help Section -->
+        <div class="text-center mt-5 mb-5">
+            <h3>Still Need Help?</h3>
+            <p class="text-muted">Can't find what you're looking for? We're here to help!</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="contact-us.html" class="btn btn-primary">
+                    <i class="fas fa-envelope me-2"></i>Contact Support
+                </a>
+                <a href="faq.html" class="btn btn-outline-primary">
+                    <i class="fas fa-question-circle me-2"></i>View FAQ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+</body>
+</html> 

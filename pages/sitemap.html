@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="sitemap-hero py-5 position-relative overflow-hidden">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center animate__animated animate__fadeInUp">
+                    <h1 class="display-4 fw-bold mb-4 text-gradient">Sitemap</h1>
+                    <p class="lead mb-4">Find everything you need on ImageTools</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sitemap Content -->
+    <section class="sitemap-content py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="sitemap-card card border-0 shadow-sm">
+                        <div class="card-body p-4 p-lg-5">
+                            <!-- Main Pages -->
+                            <div class="sitemap-section mb-5 animate__animated animate__fadeIn">
+                                <h2 class="h4 mb-4">
+                                    <i class="fas fa-home text-primary me-2"></i>Main Pages
+                                </h2>
+                                <ul class="sitemap-list">
+                                    <li>
+                                        <a href="../index.html">Home</a>
+                                        <ul>
+                                            <li><a href="../index.html#features">Features</a></li>
+                                            <li><a href="../index.html#tools">Tools</a></li>
+                                            <li><a href="../index.html#how-it-works">How It Works</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="about.html">About Us</a></li>
+                                    <li><a href="privacy.html">Privacy Policy</a></li>
+                                    <li><a href="terms.html">Terms of Service</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Convert Tools -->
+                            <div class="sitemap-section mb-5 animate__animated animate__fadeIn">
+                                <h2 class="h4 mb-4">
+                                    <i class="fas fa-exchange-alt text-primary me-2"></i>Convert Tools
+                                </h2>
+                                <ul class="sitemap-list">
+                                    <li>
+                                        <a href="../tools/jpg-to-png.html">JPG to PNG</a>
+                                        <span class="badge bg-primary ms-2">Popular</span>
+                                    </li>
+                                    <li><a href="../tools/png-to-jpg.html">PNG to JPG</a></li>
+                                    <li><a href="../tools/webp-convert.html">WebP Converter</a></li>
+                                    <li><a href="../tools/pdf-to-image.html">PDF to Image</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Edit Tools -->
+                            <div class="sitemap-section mb-5 animate__animated animate__fadeIn">
+                                <h2 class="h4 mb-4">
+                                    <i class="fas fa-crop text-primary me-2"></i>Edit Tools
+                                </h2>
+                                <ul class="sitemap-list">
+                                    <li><a href="../tools/resize.html">Resize Image</a></li>
+                                    <li><a href="../tools/crop.html">Crop Image</a></li>
+                                    <li><a href="../tools/rotate.html">Rotate Image</a></li>
+                                    <li><a href="../tools/filters.html">Apply Filters</a></li>
+                                    <li><a href="../tools/effects.html">Add Effects</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Batch Processing -->
+                            <div class="sitemap-section mb-5 animate__animated animate__fadeIn">
+                                <h2 class="h4 mb-4">
+                                    <i class="fas fa-layer-group text-primary me-2"></i>Batch Processing
+                                </h2>
+                                <ul class="sitemap-list">
+                                    <li><a href="../tools/batch-convert.html">Batch Convert</a></li>
+                                    <li><a href="../tools/batch-resize.html">Batch Resize</a></li>
+                                    <li><a href="../tools/batch-compress.html">Batch Compress</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Support -->
+                            <div class="sitemap-section animate__animated animate__fadeIn">
+                                <h2 class="h4 mb-4">
+                                    <i class="fas fa-question-circle text-primary me-2"></i>Support
+                                </h2>
+                                <ul class="sitemap-list">
+                                    <li><a href="../support/faq.html">FAQ</a></li>
+                                    <li><a href="../support/contact.html">Contact Us</a></li>
+                                    <li><a href="../support/feedback.html">Feedback</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load header and footer
+            fetch('../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    /* Sitemap Page Styles */
+    .sitemap-hero {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        overflow: hidden;
+    }
+
+    .sitemap-card {
+        border-radius: 20px;
+    }
+
+    /* Sitemap Sections */
+    .sitemap-section {
+        position: relative;
+    }
+
+    .sitemap-section:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: -2rem;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: rgba(var(--bs-primary-rgb), 0.1);
+    }
+
+    /* Sitemap Lists */
+    .sitemap-list {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    .sitemap-list li {
+        margin-bottom: 0.5rem;
+    }
+
+    .sitemap-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .sitemap-list ul {
+        list-style: none;
+        padding-left: 1.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .sitemap-list a {
+        color: var(--bs-body-color);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .sitemap-list a:hover {
+        color: var(--bs-primary);
+        transform: translateX(5px);
+    }
+
+    .sitemap-list a::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        margin-right: 0.75rem;
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode .sitemap-hero {
+        background: linear-gradient(135deg, #212529, #343a40);
+    }
+
+    .dark-mode .sitemap-card {
+        background: #2d2d2d;
+    }
+
+    .dark-mode .sitemap-section:not(:last-child)::after {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode .sitemap-list a {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .dark-mode .sitemap-list a:hover {
+        color: var(--bs-primary);
+    }
+    </style>
+</body>
+</html> 

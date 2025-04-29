@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Image Compressor - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Bulk Image Compressor</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="image-input" accept="image/*" multiple style="display:none;">
+                                <i class="fas fa-images fa-3x mb-3"></i>
+                                <h4>Drag & Drop Your Images Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose Files
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP, GIF</p>
+                            </div>
+                        </div>
+
+                        <!-- File List -->
+                        <div class="file-list mb-4" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Files to Compress</h5>
+                                <button class="btn btn-outline-danger btn-sm" id="clear-all">
+                                    <i class="fas fa-trash me-1"></i>Clear All
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Size</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="file-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Compression Settings -->
+                        <div class="compression-settings mb-4" style="display: none;">
+                            <h5>Compression Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Quality</label>
+                                    <input type="range" class="form-range" id="quality" min="1" max="100" value="80">
+                                    <div class="text-center"><span id="quality-value">80</span>%</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Output Format</label>
+                                    <select class="form-select" id="format">
+                                        <option value="auto">Same as input</option>
+                                        <option value="jpeg">Convert to JPG</option>
+                                        <option value="png">Convert to PNG</option>
+                                        <option value="webp">Convert to WebP</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Max Width</label>
+                                    <input type="number" class="form-control" id="max-width" placeholder="Original width">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Max Height</label>
+                                    <input type="number" class="form-control" id="max-height" placeholder="Original height">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="preserve-metadata">
+                                        <label class="form-check-label" for="preserve-metadata">
+                                            Preserve image metadata
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Process Section -->
+                        <div id="process-section" class="text-center mt-4" style="display: none;">
+                            <button class="btn btn-success btn-lg" id="compress-btn">
+                                <i class="fas fa-compress me-2"></i>Compress Images
+                            </button>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Processing files...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { BulkCompressor } from '../../js/bulk-compressor.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const compressor = new BulkCompressor({
+                inputElement: '#image-input',
+                fileListElement: '#file-list',
+                clearAllButton: '#clear-all',
+                qualityElement: '#quality',
+                qualityValueElement: '#quality-value',
+                formatElement: '#format',
+                maxWidthElement: '#max-width',
+                maxHeightElement: '#max-height',
+                preserveMetadataElement: '#preserve-metadata',
+                compressButton: '#compress-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .upload-area:hover {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .table th {
+        font-weight: 600;
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .file-status {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 50rem;
+    }
+
+    .file-status.pending {
+        background: rgba(var(--bs-warning-rgb), 0.1);
+        color: var(--bs-warning);
+    }
+
+    .file-status.processing {
+        background: rgba(var(--bs-primary-rgb), 0.1);
+        color: var(--bs-primary);
+    }
+
+    .file-status.completed {
+        background: rgba(var(--bs-success-rgb), 0.1);
+        color: var(--bs-success);
+    }
+
+    .file-status.error {
+        background: rgba(var(--bs-danger-rgb), 0.1);
+        color: var(--bs-danger);
+    }
+
+    /* Dark Mode */
+    .dark-mode .table th {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+        background-color: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .dark-mode .form-control:focus,
+    .dark-mode .form-select:focus {
+        background-color: #2d2d2d;
+        border-color: var(--bs-primary);
+    }
+
+    .dark-mode .table {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .dark-mode .table td,
+    .dark-mode .table th {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    </style>
+</body>
+</html> 

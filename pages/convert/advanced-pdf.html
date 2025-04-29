@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced PDF Options - ImageTools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #2196F3;
+            background: #e3f2fd;
+        }
+
+        .preview-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .settings-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .watermark-preview {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h1 class="text-center mb-4">Advanced PDF Options</h1>
+                <p class="text-center text-muted mb-5">Create professional PDFs with advanced settings like compression, metadata, password protection, and watermarks.</p>
+
+                <!-- Upload Area -->
+                <div class="upload-area mb-4" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                    <h4>Drag & Drop Images Here</h4>
+                    <p class="text-muted">or</p>
+                    <input type="file" id="fileInput" multiple accept="image/*" style="display: none">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        Choose Images
+                    </button>
+                    <p class="mt-2 text-muted">Supported formats: JPG, PNG, WebP</p>
+                </div>
+
+                <!-- Preview Area -->
+                <div id="previewArea" class="text-center mb-4" style="display: none;">
+                    <h5 class="mb-3">Selected Images (<span id="imageCount">0</span>)</h5>
+                    <div id="imagePreview" class="d-flex flex-wrap justify-content-center gap-3"></div>
+                    <button class="btn btn-outline-danger mt-3" onclick="clearSelection()">
+                        <i class="fas fa-trash-alt"></i> Clear Selection
+                    </button>
+                </div>
+
+                <!-- Advanced Settings -->
+                <div id="settingsArea" style="display: none;">
+                    <!-- Compression Settings -->
+                    <div class="settings-card">
+                        <h5><i class="fas fa-compress me-2"></i>Compression Options</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Image Quality</label>
+                                <select class="form-select" id="imageQuality">
+                                    <option value="high">High (Larger file size)</option>
+                                    <option value="medium">Medium (Balanced)</option>
+                                    <option value="low">Low (Smaller file size)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Compression Level</label>
+                                <input type="range" class="form-range" id="compressionLevel" min="0" max="9" value="5">
+                                <div class="d-flex justify-content-between">
+                                    <small>Less</small>
+                                    <small>More</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metadata Settings -->
+                    <div class="settings-card">
+                        <h5><i class="fas fa-info-circle me-2"></i>PDF Metadata</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control" id="pdfTitle" placeholder="Document Title">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Author</label>
+                                <input type="text" class="form-control" id="pdfAuthor" placeholder="Author Name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="pdfSubject" placeholder="Document Subject">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Keywords</label>
+                                <input type="text" class="form-control" id="pdfKeywords" placeholder="Comma separated keywords">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="settings-card">
+                        <h5><i class="fas fa-lock me-2"></i>Password Protection</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="enablePassword">
+                                    <label class="form-check-label" for="enablePassword">
+                                        Enable Password Protection
+                                    </label>
+                                </div>
+                                <div id="passwordFields" style="display: none;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="pdfPassword" placeholder="Enter password">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="preventPrinting">
+                                    <label class="form-check-label" for="preventPrinting">
+                                        Prevent Printing
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="preventCopying">
+                                    <label class="form-check-label" for="preventCopying">
+                                        Prevent Copying Content
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="preventEditing">
+                                    <label class="form-check-label" for="preventEditing">
+                                        Prevent Editing
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Watermark Settings -->
+                    <div class="settings-card">
+                        <h5><i class="fas fa-stamp me-2"></i>Watermark Options</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="enableWatermark">
+                                    <label class="form-check-label" for="enableWatermark">
+                                        Add Watermark
+                                    </label>
+                                </div>
+                                <div id="watermarkFields" style="display: none;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Watermark Text</label>
+                                        <input type="text" class="form-control" id="watermarkText" placeholder="Enter watermark text">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Opacity</label>
+                                        <input type="range" class="form-range" id="watermarkOpacity" min="0" max="100" value="30">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Position</label>
+                                        <select class="form-select" id="watermarkPosition">
+                                            <option value="center">Center</option>
+                                            <option value="top-left">Top Left</option>
+                                            <option value="top-right">Top Right</option>
+                                            <option value="bottom-left">Bottom Left</option>
+                                            <option value="bottom-right">Bottom Right</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="watermarkPreview" class="watermark-preview">
+                                    Watermark Preview
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <div class="text-center">
+                    <button class="btn btn-primary btn-lg px-5" id="convertBtn" style="display: none;">
+                        <i class="fas fa-file-pdf me-2"></i>Create Advanced PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Component Loader -->
+    <script>
+        // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <!-- Custom JS -->
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewArea = document.getElementById('previewArea');
+        const imagePreview = document.getElementById('imagePreview');
+        const settingsArea = document.getElementById('settingsArea');
+        const convertBtn = document.getElementById('convertBtn');
+        const imageCountSpan = document.getElementById('imageCount');
+        let selectedFiles = [];
+
+        // Password protection toggle
+        document.getElementById('enablePassword').addEventListener('change', function() {
+            document.getElementById('passwordFields').style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Watermark toggle and preview
+        document.getElementById('enableWatermark').addEventListener('change', function() {
+            document.getElementById('watermarkFields').style.display = this.checked ? 'block' : 'none';
+            updateWatermarkPreview();
+        });
+
+        function updateWatermarkPreview() {
+            const preview = document.getElementById('watermarkPreview');
+            const text = document.getElementById('watermarkText').value || 'Watermark Preview';
+            const opacity = document.getElementById('watermarkOpacity').value;
+            preview.textContent = text;
+            preview.style.opacity = opacity / 100;
+        }
+
+        document.getElementById('watermarkText').addEventListener('input', updateWatermarkPreview);
+        document.getElementById('watermarkOpacity').addEventListener('input', updateWatermarkPreview);
+
+        // File handling functions
+        function clearSelection() {
+            selectedFiles = [];
+            imagePreview.innerHTML = '';
+            imageCountSpan.textContent = '0';
+            previewArea.style.display = 'none';
+            settingsArea.style.display = 'none';
+            convertBtn.style.display = 'none';
+            fileInput.value = '';
+        }
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#2196F3';
+            uploadArea.style.background = '#e3f2fd';
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.background = '#f8f9fa';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.background = '#f8f9fa';
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            if (newFiles.length === 0) {
+                alert('Please select valid image files (JPG, PNG, or WebP).');
+                return;
+            }
+
+            selectedFiles = [...selectedFiles, ...newFiles];
+            imageCountSpan.textContent = selectedFiles.length;
+            
+            imagePreview.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const container = document.createElement('div');
+                    container.className = 'position-relative';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-image';
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0 m-1';
+                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    removeBtn.onclick = () => {
+                        selectedFiles.splice(index, 1);
+                        container.remove();
+                        imageCountSpan.textContent = selectedFiles.length;
+                        if (selectedFiles.length === 0) {
+                            clearSelection();
+                        }
+                    };
+                    
+                    container.appendChild(img);
+                    container.appendChild(removeBtn);
+                    imagePreview.appendChild(container);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            previewArea.style.display = 'block';
+            settingsArea.style.display = 'block';
+            convertBtn.style.display = 'inline-block';
+        }
+
+        convertBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) {
+                alert('Please select at least one image.');
+                return;
+            }
+
+            // Validate password if enabled
+            if (document.getElementById('enablePassword').checked) {
+                const password = document.getElementById('pdfPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (!password) {
+                    alert('Please enter a password.');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match.');
+                    return;
+                }
+            }
+
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating PDF...';
+
+            try {
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                
+                // Set metadata
+                pdfDoc.setTitle(document.getElementById('pdfTitle').value);
+                pdfDoc.setAuthor(document.getElementById('pdfAuthor').value);
+                pdfDoc.setSubject(document.getElementById('pdfSubject').value);
+                pdfDoc.setKeywords(document.getElementById('pdfKeywords').value.split(',').map(k => k.trim()));
+
+                // Process each image
+                for (const file of selectedFiles) {
+                    const imageBytes = await file.arrayBuffer();
+                    let image;
+                    
+                    if (file.type === 'image/jpeg') {
+                        image = await pdfDoc.embedJpg(imageBytes);
+                    } else if (file.type === 'image/png') {
+                        image = await pdfDoc.embedPng(imageBytes);
+                    }
+
+                    const page = pdfDoc.addPage();
+                    const { width, height } = page.getSize();
+                    const scale = Math.min(width / image.width, height / image.height) * 0.9;
+
+                    page.drawImage(image, {
+                        x: (width - image.width * scale) / 2,
+                        y: (height - image.height * scale) / 2,
+                        width: image.width * scale,
+                        height: image.height * scale
+                    });
+
+                    // Add watermark if enabled
+                    if (document.getElementById('enableWatermark').checked) {
+                        const watermarkText = document.getElementById('watermarkText').value;
+                        const opacity = document.getElementById('watermarkOpacity').value / 100;
+                        const position = document.getElementById('watermarkPosition').value;
+                        
+                        let x = width / 2;
+                        let y = height / 2;
+
+                        switch (position) {
+                            case 'top-left':
+                                x = 50;
+                                y = height - 50;
+                                break;
+                            case 'top-right':
+                                x = width - 50;
+                                y = height - 50;
+                                break;
+                            case 'bottom-left':
+                                x = 50;
+                                y = 50;
+                                break;
+                            case 'bottom-right':
+                                x = width - 50;
+                                y = 50;
+                                break;
+                        }
+
+                        page.drawText(watermarkText, {
+                            x,
+                            y,
+                            size: 50,
+                            opacity,
+                            color: PDFLib.rgb(0.5, 0.5, 0.5),
+                            rotate: PDFLib.degrees(45)
+                        });
+                    }
+                }
+
+                // Apply security if enabled
+                if (document.getElementById('enablePassword').checked) {
+                    const password = document.getElementById('pdfPassword').value;
+                    await pdfDoc.encrypt({
+                        userPassword: password,
+                        ownerPassword: password,
+                        permissions: {
+                            printing: !document.getElementById('preventPrinting').checked,
+                            copying: !document.getElementById('preventCopying').checked,
+                            modifying: !document.getElementById('preventEditing').checked
+                        }
+                    });
+                }
+
+                const pdfBytes = await pdfDoc.save({
+                    useObjectStreams: false,
+                    addDefaultPage: false
+                });
+
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'advanced-pdf.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Error creating PDF:', error);
+                alert('Error creating PDF. Please try again.');
+            } finally {
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '<i class="fas fa-file-pdf me-2"></i>Create Advanced PDF';
+            }
+        });
+    </script>
+</body>
+</html> 

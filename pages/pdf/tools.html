@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Tools - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- PDF-Lib -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1"></script>
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">PDF Tools</h1>
+
+        <!-- PDF Tools Grid -->
+        <div class="row g-4">
+            <!-- Merge PDFs -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-object-group fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h5">Merge PDFs</h3>
+                        <p class="card-text">Combine multiple PDF files into a single document.</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mergePdfModal">
+                            Merge PDFs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Split PDF -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cut fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h5">Split PDF</h3>
+                        <p class="card-text">Split your PDF into multiple files by page ranges.</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#splitPdfModal">
+                            Split PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compress PDF -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-compress fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h5">Compress PDF</h3>
+                        <p class="card-text">Reduce PDF file size while maintaining quality.</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#compressPdfModal">
+                            Compress PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Watermark -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-stamp fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h5">Add Watermark</h3>
+                        <p class="card-text">Add text or image watermarks to your PDF.</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#watermarkModal">
+                            Add Watermark
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Protect PDF -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-lock fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h5">Protect PDF</h3>
+                        <p class="card-text">Secure your PDF with password protection.</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#protectPdfModal">
+                            Protect PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rotate PDF -->
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-undo fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h5">Rotate PDF</h3>
+                        <p class="card-text">Rotate pages in your PDF document.</p>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#rotatePdfModal">
+                            Rotate PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Merge PDF Modal -->
+    <div class="modal fade" id="mergePdfModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Merge PDFs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area text-center p-5 mb-3">
+                        <input type="file" id="merge-pdf-input" accept=".pdf" multiple style="display:none;">
+                        <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                        <h4>Drag & Drop PDF Files Here</h4>
+                        <p>or</p>
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('merge-pdf-input').click()">
+                            Choose PDF Files
+                        </button>
+                    </div>
+                    <div id="merge-file-list" class="list-group"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="merge-pdf-btn">Merge PDFs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Split PDF Modal -->
+    <div class="modal fade" id="splitPdfModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Split PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area text-center p-5 mb-3">
+                        <input type="file" id="split-pdf-input" accept=".pdf" style="display:none;">
+                        <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                        <h4>Drag & Drop PDF File Here</h4>
+                        <p>or</p>
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('split-pdf-input').click()">
+                            Choose PDF File
+                        </button>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="page-ranges">Page Ranges (e.g., 1-3,5,7-9)</label>
+                        <input type="text" class="form-control" id="page-ranges" placeholder="Enter page ranges">
+                        <small class="text-muted">Separate ranges with commas. Use hyphen for page ranges.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="split-pdf-btn">Split PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compress PDF Modal -->
+    <div class="modal fade" id="compressPdfModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Compress PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area text-center p-5 mb-3">
+                        <input type="file" id="compress-pdf-input" accept=".pdf" style="display:none;">
+                        <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                        <h4>Drag & Drop PDF File Here</h4>
+                        <p>or</p>
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('compress-pdf-input').click()">
+                            Choose PDF File
+                        </button>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Compression Level</label>
+                        <select class="form-select" id="compression-level">
+                            <option value="low">Low Compression (Better Quality)</option>
+                            <option value="medium" selected>Medium Compression (Balanced)</option>
+                            <option value="high">High Compression (Smaller Size)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="compress-pdf-btn">Compress PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Watermark Modal -->
+    <div class="modal fade" id="watermarkModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Watermark</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area text-center p-5 mb-3">
+                        <input type="file" id="watermark-pdf-input" accept=".pdf" style="display:none;">
+                        <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                        <h4>Drag & Drop PDF File Here</h4>
+                        <p>or</p>
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('watermark-pdf-input').click()">
+                            Choose PDF File
+                        </button>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="watermark-text">Watermark Text</label>
+                        <input type="text" class="form-control" id="watermark-text" placeholder="Enter watermark text">
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <label>Font Size</label>
+                            <input type="number" class="form-control" id="watermark-size" value="50">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Opacity</label>
+                            <input type="range" class="form-range" id="watermark-opacity" min="0" max="100" value="50">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Rotation</label>
+                            <input type="number" class="form-control" id="watermark-rotation" value="45">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="watermark-pdf-btn">Add Watermark</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Protect PDF Modal -->
+    <div class="modal fade" id="protectPdfModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Protect PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area text-center p-5 mb-3">
+                        <input type="file" id="protect-pdf-input" accept=".pdf" style="display:none;">
+                        <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                        <h4>Drag & Drop PDF File Here</h4>
+                        <p>or</p>
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('protect-pdf-input').click()">
+                            Choose PDF File
+                        </button>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="pdf-password">Password</label>
+                        <input type="password" class="form-control" id="pdf-password" placeholder="Enter password">
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm-password" placeholder="Confirm password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="protect-pdf-btn">Protect PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rotate PDF Modal -->
+    <div class="modal fade" id="rotatePdfModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rotate PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="upload-area text-center p-5 mb-3">
+                        <input type="file" id="rotate-pdf-input" accept=".pdf" style="display:none;">
+                        <i class="fas fa-file-pdf fa-3x mb-3"></i>
+                        <h4>Drag & Drop PDF File Here</h4>
+                        <p>or</p>
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('rotate-pdf-input').click()">
+                            Choose PDF File
+                        </button>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Rotation Angle</label>
+                        <select class="form-select" id="rotation-angle">
+                            <option value="90">Rotate 90° Clockwise</option>
+                            <option value="180">Rotate 180°</option>
+                            <option value="270">Rotate 90° Counterclockwise</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="rotate-pdf-btn">Rotate PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { PDFTools } from '../../js/pdf-tools.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const pdfTools = new PDFTools();
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+
+            // Merge PDFs
+            const mergeInput = document.getElementById('merge-pdf-input');
+            const mergeBtn = document.getElementById('merge-pdf-btn');
+            const mergeFileList = document.getElementById('merge-file-list');
+
+            mergeInput.addEventListener('change', (e) => {
+                mergeFileList.innerHTML = '';
+                Array.from(e.target.files).forEach(file => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item';
+                    item.textContent = file.name;
+                    mergeFileList.appendChild(item);
+                });
+            });
+
+            mergeBtn.addEventListener('click', async () => {
+                try {
+                    const files = mergeInput.files;
+                    if (files.length < 2) {
+                        throw new Error('Please select at least 2 PDF files');
+                    }
+                    
+                    const mergedPdf = await pdfTools.mergePDFs(Array.from(files));
+                    pdfTools.createDownloadLink(mergedPdf, 'merged.pdf');
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('mergePdfModal')).hide();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+
+            // Split PDF
+            const splitInput = document.getElementById('split-pdf-input');
+            const splitBtn = document.getElementById('split-pdf-btn');
+            const pageRanges = document.getElementById('page-ranges');
+
+            splitBtn.addEventListener('click', async () => {
+                try {
+                    const file = splitInput.files[0];
+                    if (!file) {
+                        throw new Error('Please select a PDF file');
+                    }
+                    
+                    const ranges = pageRanges.value.split(',').map(r => r.trim());
+                    const splitPdfs = await pdfTools.splitPDF(file, ranges);
+                    
+                    splitPdfs.forEach((pdf, index) => {
+                        pdfTools.createDownloadLink(pdf, `split_${index + 1}.pdf`);
+                    });
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('splitPdfModal')).hide();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+
+            // Compress PDF
+            const compressInput = document.getElementById('compress-pdf-input');
+            const compressBtn = document.getElementById('compress-pdf-btn');
+            const compressionLevel = document.getElementById('compression-level');
+
+            compressBtn.addEventListener('click', async () => {
+                try {
+                    const file = compressInput.files[0];
+                    if (!file) {
+                        throw new Error('Please select a PDF file');
+                    }
+                    
+                    const compressedPdf = await pdfTools.compressPDF(file, compressionLevel.value);
+                    pdfTools.createDownloadLink(compressedPdf, 'compressed.pdf');
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('compressPdfModal')).hide();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+
+            // Add Watermark
+            const watermarkInput = document.getElementById('watermark-pdf-input');
+            const watermarkBtn = document.getElementById('watermark-pdf-btn');
+            const watermarkText = document.getElementById('watermark-text');
+            const watermarkSize = document.getElementById('watermark-size');
+            const watermarkOpacity = document.getElementById('watermark-opacity');
+            const watermarkRotation = document.getElementById('watermark-rotation');
+
+            watermarkBtn.addEventListener('click', async () => {
+                try {
+                    const file = watermarkInput.files[0];
+                    if (!file) {
+                        throw new Error('Please select a PDF file');
+                    }
+                    
+                    if (!watermarkText.value) {
+                        throw new Error('Please enter watermark text');
+                    }
+                    
+                    const options = {
+                        fontSize: parseInt(watermarkSize.value),
+                        opacity: parseInt(watermarkOpacity.value) / 100,
+                        rotation: parseInt(watermarkRotation.value)
+                    };
+                    
+                    const watermarkedPdf = await pdfTools.addWatermark(file, watermarkText.value, options);
+                    pdfTools.createDownloadLink(watermarkedPdf, 'watermarked.pdf');
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('watermarkModal')).hide();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+
+            // Protect PDF
+            const protectInput = document.getElementById('protect-pdf-input');
+            const protectBtn = document.getElementById('protect-pdf-btn');
+            const pdfPassword = document.getElementById('pdf-password');
+            const confirmPassword = document.getElementById('confirm-password');
+
+            protectBtn.addEventListener('click', async () => {
+                try {
+                    const file = protectInput.files[0];
+                    if (!file) {
+                        throw new Error('Please select a PDF file');
+                    }
+                    
+                    if (pdfPassword.value !== confirmPassword.value) {
+                        throw new Error('Passwords do not match');
+                    }
+                    
+                    const protectedPdf = await pdfTools.protectPDF(file, pdfPassword.value);
+                    pdfTools.createDownloadLink(protectedPdf, 'protected.pdf');
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('protectPdfModal')).hide();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+
+            // Rotate PDF
+            const rotateInput = document.getElementById('rotate-pdf-input');
+            const rotateBtn = document.getElementById('rotate-pdf-btn');
+            const rotationAngle = document.getElementById('rotation-angle');
+
+            rotateBtn.addEventListener('click', async () => {
+                try {
+                    const file = rotateInput.files[0];
+                    if (!file) {
+                        throw new Error('Please select a PDF file');
+                    }
+                    
+                    const rotatedPdf = await pdfTools.rotatePDF(file, parseInt(rotationAngle.value));
+                    pdfTools.createDownloadLink(rotatedPdf, 'rotated.pdf');
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('rotatePdfModal')).hide();
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

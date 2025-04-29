@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert HEIC to JPG - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Convert HEIC images to JPG format. Fast and easy conversion of iPhone photos to standard JPG format with quality control.">
+    <meta name="keywords" content="heic to jpg, heic converter, iphone photo converter, heic to jpeg, image converter">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Required Libraries -->
+    <script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Convert HEIC to JPG</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="image-input" accept=".heic,.HEIC" multiple style="display:none;">
+                                <i class="fas fa-image fa-3x mb-3"></i>
+                                <h4>Drag & Drop Your HEIC Images Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose Images
+                                </button>
+                                <p class="mt-3 text-muted">Supported format: HEIC (iPhone Photos)</p>
+                            </div>
+                        </div>
+
+                        <!-- Settings Section -->
+                        <div class="settings-section mb-4" style="display: none;">
+                            <h5>Conversion Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">JPG Quality</label>
+                                    <input type="range" class="form-range" id="quality" min="1" max="100" value="90">
+                                    <div class="text-center"><span id="quality-value">90</span>%</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Preserve Metadata</label>
+                                    <select class="form-select" id="preserve-metadata">
+                                        <option value="all">All Metadata</option>
+                                        <option value="exif">EXIF Only</option>
+                                        <option value="none">No Metadata</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="auto-rotate" checked>
+                                        <label class="form-check-label" for="auto-rotate">
+                                            Auto-rotate based on orientation
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section" style="display: none;">
+                            <h5>Preview</h5>
+                            <div id="image-preview" class="row g-3"></div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-success" id="convert-btn">
+                                    <i class="fas fa-exchange-alt me-2"></i>Convert to JPG
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Converting images...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { HeicConverter } from '../../js/heic-converter.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const converter = new HeicConverter({
+                inputElement: '#image-input',
+                previewElement: '#image-preview',
+                qualityElement: '#quality',
+                qualityValueElement: '#quality-value',
+                preserveMetadataElement: '#preserve-metadata',
+                autoRotateElement: '#auto-rotate',
+                convertButton: '#convert-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .upload-area:hover,
+    .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .preview-item {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .preview-item .remove-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .preview-item .remove-btn:hover {
+        background: rgba(255, 255, 255, 1);
+    }
+
+    /* Dark Mode */
+    .dark-mode .upload-area {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .dark-mode .upload-area:hover,
+    .dark-mode .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .preview-item .remove-btn {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+    }
+
+    .dark-mode .preview-item .remove-btn:hover {
+        background: rgba(0, 0, 0, 0.9);
+    }
+    </style>
+</body>
+</html> 

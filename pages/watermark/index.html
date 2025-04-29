@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watermark Tools - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0 text-center py-4">
+                        <h1 class="h3 mb-3 text-gradient">Watermark Tools</h1>
+                        <p class="text-muted mb-0">Add or remove watermarks from your images</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Tool Selection -->
+                        <div class="tool-selection mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <a href="add.html" class="text-decoration-none">
+                                        <div class="tool-card p-4 rounded-3 text-center h-100">
+                                            <div class="tool-icon mb-3">
+                                                <i class="fas fa-plus-circle fa-3x text-primary"></i>
+                                            </div>
+                                            <h4>Add Watermark</h4>
+                                            <p class="text-muted mb-0">Add text or image watermarks to your photos</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="remove.html" class="text-decoration-none">
+                                        <div class="tool-card p-4 rounded-3 text-center h-100">
+                                            <div class="tool-icon mb-3">
+                                                <i class="fas fa-eraser fa-3x text-primary"></i>
+                                            </div>
+                                            <h4>Remove Watermark</h4>
+                                            <p class="text-muted mb-0">Remove unwanted watermarks from images</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="bulk.html" class="text-decoration-none">
+                                        <div class="tool-card p-4 rounded-3 text-center">
+                                            <div class="tool-icon mb-3">
+                                                <i class="fas fa-layer-group fa-3x text-primary"></i>
+                                            </div>
+                                            <h4>Bulk Process</h4>
+                                            <p class="text-muted mb-0">Add or remove watermarks from multiple images at once</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Features Section -->
+                        <div class="features-section mt-5">
+                            <h5 class="mb-4">Features</h5>
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="feature-card p-3 rounded-3">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-text-width text-primary me-3"></i>
+                                            <div>
+                                                <h6 class="mb-1">Text Watermarks</h6>
+                                                <p class="small text-muted mb-0">Add custom text with various fonts and styles</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card p-3 rounded-3">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-image text-primary me-3"></i>
+                                            <div>
+                                                <h6 class="mb-1">Image Watermarks</h6>
+                                                <p class="small text-muted mb-0">Use your own logo or image as watermark</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-card p-3 rounded-3">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-sliders-h text-primary me-3"></i>
+                                            <div>
+                                                <h6 class="mb-1">Advanced Controls</h6>
+                                                <p class="small text-muted mb-0">Adjust position, opacity, and size</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import ComponentLoader from '../../js/component-loader.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const componentLoader = new ComponentLoader();
+            componentLoader.loadComponents();
+        });
+    </script>
+
+    <style>
+    .tool-card {
+        background: rgba(var(--bs-primary-rgb), 0.03);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .tool-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .tool-icon {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .feature-card {
+        background: rgba(var(--bs-primary-rgb), 0.03);
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateX(5px);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    /* Dark Mode */
+    .dark-mode .tool-card,
+    .dark-mode .feature-card {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .dark-mode .tool-card:hover,
+    .dark-mode .feature-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    </style>
+</body>
+</html> 

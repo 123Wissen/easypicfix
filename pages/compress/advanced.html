@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Image Compressor - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Advanced Image Compressor</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="file-input" accept="image/*,application/pdf" style="display:none;">
+                                <i class="fas fa-file-image fa-3x mb-3"></i>
+                                <h4>Drag & Drop Your Image Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('file-input').click()">
+                                    Choose File
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP, GIF, PDF</p>
+                            </div>
+                        </div>
+
+                        <!-- Compression Settings -->
+                        <div class="compression-settings mb-4" style="display: none;">
+                            <h5>Compression Level</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Preset Level</label>
+                                    <select class="form-select" id="compression-level">
+                                        <option value="low">Low Compression (Best Quality)</option>
+                                        <option value="medium" selected>Medium Compression (Balanced)</option>
+                                        <option value="high">High Compression (Smallest Size)</option>
+                                        <option value="custom">Custom Settings</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Overall Quality</label>
+                                    <input type="range" class="form-range" id="quality" min="1" max="100" value="80">
+                                    <div class="text-center"><span id="quality-value">80</span>%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Settings -->
+                        <div class="image-settings mb-4" style="display: none;">
+                            <h5>Image Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Max Width</label>
+                                    <input type="number" class="form-control" id="max-width" placeholder="Original width">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Max Height</label>
+                                    <input type="number" class="form-control" id="max-height" placeholder="Original height">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Resampling Method</label>
+                                    <select class="form-select" id="resample">
+                                        <option value="high">High Quality</option>
+                                        <option value="medium">Medium Quality</option>
+                                        <option value="low">Low Quality</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Color Space</label>
+                                    <select class="form-select" id="color-space">
+                                        <option value="rgb">RGB</option>
+                                        <option value="srgb">sRGB</option>
+                                        <option value="cmyk">CMYK</option>
+                                        <option value="grayscale">Grayscale</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings -->
+                        <div class="advanced-settings mb-4" style="display: none;">
+                            <h5>Advanced Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Optimization Method</label>
+                                    <select class="form-select" id="optimization">
+                                        <option value="auto">Automatic</option>
+                                        <option value="lossless">Lossless</option>
+                                        <option value="aggressive">Aggressive</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Custom DPI</label>
+                                    <input type="number" class="form-control" id="custom-dpi" placeholder="72">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">JPEG Quality</label>
+                                    <input type="number" class="form-control" id="jpeg-quality" value="80" min="1" max="100">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">PNG Compression</label>
+                                    <input type="number" class="form-control" id="png-compression" value="6" min="0" max="9">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">WebP Quality</label>
+                                    <input type="number" class="form-control" id="webp-quality" value="80" min="1" max="100">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section mb-4" style="display: none;">
+                            <h5>Preview</h5>
+                            <div id="preview" class="text-center"></div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div id="action-buttons" class="text-center mt-4" style="display: none;">
+                            <button class="btn btn-outline-secondary me-2" id="reset-btn">
+                                <i class="fas fa-undo me-2"></i>Reset Settings
+                            </button>
+                            <button class="btn btn-success" id="compress-btn">
+                                <i class="fas fa-compress me-2"></i>Compress Image
+                            </button>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Compressing image...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { AdvancedCompressor } from '../../js/advanced-compressor.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const compressor = new AdvancedCompressor({
+                previewElement: '#preview',
+                compressionLevelSelect: '#compression-level',
+                qualitySlider: '#quality',
+                optimizationSelect: '#optimization',
+                maxWidthInput: '#max-width',
+                maxHeightInput: '#max-height',
+                resampleSelect: '#resample',
+                colorSpaceSelect: '#color-space',
+                customDPIInput: '#custom-dpi',
+                jpegQualityInput: '#jpeg-quality',
+                pngCompressionInput: '#png-compression',
+                webpQualityInput: '#webp-quality',
+                compressButton: '#compress-btn',
+                resetButton: '#reset-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Update quality value display
+            const qualitySlider = document.querySelector('#quality');
+            const qualityValue = document.querySelector('#quality-value');
+            qualitySlider?.addEventListener('input', () => {
+                qualityValue.textContent = qualitySlider.value;
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .upload-area:hover,
+    .upload-area.border-primary {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    #preview img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark Mode */
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+        background-color: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .dark-mode .form-control:focus,
+    .dark-mode .form-select:focus {
+        background-color: #2d2d2d;
+        border-color: var(--bs-primary);
+    }
+
+    .dark-mode #preview img {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    </style>
+</body>
+</html> 

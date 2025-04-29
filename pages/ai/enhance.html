@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Enhancement - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Enhance your images using AI technology. Improve quality, remove noise, increase resolution, and enhance details automatically.">
+    <meta name="keywords" content="ai image enhancement, image upscaling, noise reduction, image quality improvement, ai photo enhancement">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">AI Image Enhancement</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="image-input" accept="image/*" multiple style="display:none;">
+                                <i class="fas fa-wand-magic-sparkles fa-3x mb-3"></i>
+                                <h4>Drag & Drop Your Images Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose Images
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP</p>
+                                <p class="mt-2 small text-muted">Maximum file size: 10MB per image</p>
+                            </div>
+                        </div>
+
+                        <!-- Settings Section -->
+                        <div class="settings-section mb-4" style="display: none;">
+                            <h5>Enhancement Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Enhancement Mode</label>
+                                    <select class="form-select" id="enhancement-mode">
+                                        <option value="auto">Auto Enhance</option>
+                                        <option value="quality">Quality Boost</option>
+                                        <option value="detail">Detail Enhancement</option>
+                                        <option value="restoration">Photo Restoration</option>
+                                        <option value="hdr">HDR Effect</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Enhancement Strength</label>
+                                    <input type="range" class="form-range" id="strength" min="1" max="100" value="50">
+                                    <div class="text-center"><span id="strength-value">50</span>%</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Upscale Factor</label>
+                                    <select class="form-select" id="upscale-factor">
+                                        <option value="1">No upscaling</option>
+                                        <option value="2">2x</option>
+                                        <option value="4">4x</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Output Format</label>
+                                    <select class="form-select" id="output-format">
+                                        <option value="same">Same as input</option>
+                                        <option value="jpg">JPG</option>
+                                        <option value="png">PNG</option>
+                                        <option value="webp">WebP</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="face-enhancement" checked>
+                                        <label class="form-check-label" for="face-enhancement">
+                                            Enable Face Enhancement
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="noise-reduction" checked>
+                                        <label class="form-check-label" for="noise-reduction">
+                                            Apply Noise Reduction
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Preview</h5>
+                                <div class="preview-controls">
+                                    <button class="btn btn-outline-secondary btn-sm me-2" id="compare-btn">
+                                        <i class="fas fa-columns me-2"></i>Compare
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" id="clear-btn">
+                                        <i class="fas fa-trash me-2"></i>Clear
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="image-preview" class="row g-3"></div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-success me-2" id="enhance-btn">
+                                    <i class="fas fa-wand-magic-sparkles me-2"></i>Enhance Images
+                                </button>
+                                <button class="btn btn-primary" id="download-btn" style="display: none;">
+                                    <i class="fas fa-download me-2"></i>Download Enhanced Images
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress mb-3">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center">
+                                <span id="progress-text">Enhancing images...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JSZip for handling multiple downloads -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { ImageEnhancer } from '../../js/image-enhancer.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const enhancer = new ImageEnhancer({
+                inputElement: '#image-input',
+                previewElement: '#image-preview',
+                enhancementModeElement: '#enhancement-mode',
+                strengthElement: '#strength',
+                strengthValueElement: '#strength-value',
+                upscaleFactorElement: '#upscale-factor',
+                outputFormatElement: '#output-format',
+                faceEnhancementElement: '#face-enhancement',
+                noiseReductionElement: '#noise-reduction',
+                compareButton: '#compare-btn',
+                clearButton: '#clear-btn',
+                enhanceButton: '#enhance-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .upload-area:hover,
+    .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .preview-item {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .preview-item .remove-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .preview-item .remove-btn:hover {
+        background: rgba(255, 255, 255, 1);
+    }
+
+    .preview-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .preview-container.split {
+        cursor: col-resize;
+    }
+
+    .preview-container .original,
+    .preview-container .enhanced {
+        width: 100%;
+        height: 100%;
+    }
+
+    .preview-container.split .enhanced {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        clip-path: inset(0 50% 0 0);
+    }
+
+    .preview-divider {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+        background: #fff;
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .preview-label {
+        position: absolute;
+        bottom: 1rem;
+        padding: 0.25rem 0.75rem;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        border-radius: 4px;
+        font-size: 0.875rem;
+    }
+
+    .preview-label.original-label {
+        left: 1rem;
+    }
+
+    .preview-label.enhanced-label {
+        right: 1rem;
+    }
+
+    /* Dark Mode */
+    .dark-mode .upload-area {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .dark-mode .upload-area:hover,
+    .dark-mode .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .preview-item .remove-btn {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+    }
+
+    .dark-mode .preview-item .remove-btn:hover {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    .dark-mode .preview-divider {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+        background-color: #2b3035;
+        border-color: #495057;
+        color: #e9ecef;
+    }
+
+    .dark-mode .form-control:focus,
+    .dark-mode .form-select:focus {
+        background-color: #2b3035;
+        border-color: #0d6efd;
+        color: #e9ecef;
+    }
+    </style>
+</body>
+</html> 

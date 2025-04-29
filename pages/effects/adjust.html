@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Adjustment - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Adjust your images with professional controls. Fine-tune brightness, contrast, saturation, exposure, and more with our easy-to-use image adjustment tool.">
+    <meta name="keywords" content="image adjustment, brightness, contrast, saturation, exposure, shadows, highlights, image editing">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #2196F3;
+            background: #e3f2fd;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #2196F3;
+            margin-bottom: 1rem;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .adjustment-controls {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-label {
+            color: #666;
+        }
+
+        .btn-download {
+            background: linear-gradient(45deg, #2196F3, #00BCD4);
+            border: none;
+            padding: 0.75rem 2rem;
+        }
+
+        .btn-download:hover {
+            opacity: 0.9;
+        }
+
+        .btn-reset {
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h1 class="text-center mb-4">Image Adjustment</h1>
+                <p class="text-center text-muted mb-5">Adjust brightness, contrast, saturation, and more to enhance your images.</p>
+
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h4>Drag & Drop Your Images Here</h4>
+                    <p class="text-muted">or</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                                    Choose Images
+                                </button>
+                    <p class="mt-2 text-muted">Supported formats: JPG, PNG, WebP</p>
+                            </div>
+
+                <!-- Image Preview and Controls -->
+                <div id="editorContainer" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Image Preview -->
+                            <img id="imagePreview" class="image-preview">
+                        </div>
+                        <div class="col-md-4">
+                            <!-- Adjustment Controls -->
+                            <div class="adjustment-controls">
+                                <div class="control-group">
+                                    <div class="control-label">
+                                        <span>Brightness</span>
+                                        <span class="value-label" id="brightnessValue">0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="brightness" min="-100" max="100" value="0">
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="control-label">
+                                        <span>Contrast</span>
+                                        <span class="value-label" id="contrastValue">0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="contrast" min="-100" max="100" value="0">
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="control-label">
+                                        <span>Saturation</span>
+                                        <span class="value-label" id="saturationValue">0</span>
+                                    </div>
+                                    <input type="range" class="form-range" id="saturation" min="-100" max="100" value="0">
+                                            </div>
+
+                                <div class="control-group">
+                                    <div class="control-label">
+                                        <span>Sharpness</span>
+                                        <span class="value-label" id="sharpnessValue">0</span>
+                                        </div>
+                                    <input type="range" class="form-range" id="sharpness" min="0" max="100" value="0">
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="control-label">
+                                        <span>Temperature</span>
+                                        <span class="value-label" id="temperatureValue">0</span>
+                                            </div>
+                                    <input type="range" class="form-range" id="temperature" min="-100" max="100" value="0">
+                                        </div>
+
+                                <div class="mt-4">
+                                    <button class="btn btn-outline-secondary btn-reset" onclick="resetAdjustments()">
+                                        <i class="fas fa-undo"></i> Reset
+                                    </button>
+                                    <button class="btn btn-primary btn-download" onclick="downloadImage()">
+                                        <i class="fas fa-download"></i> Download
+                                            </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+            // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+
+        // Variables
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const editorContainer = document.getElementById('editorContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        let originalImage = null;
+
+        // Drag and drop handling
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            const file = files[0];
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                originalImage = new Image();
+                originalImage.src = e.target.result;
+                originalImage.onload = () => {
+                    imagePreview.src = originalImage.src;
+                    editorContainer.style.display = 'block';
+                    uploadArea.style.display = 'none';
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Adjustment controls
+        const controls = ['brightness', 'contrast', 'saturation', 'sharpness', 'temperature'];
+        controls.forEach(control => {
+            const slider = document.getElementById(control);
+            const valueDisplay = document.getElementById(control + 'Value');
+            
+            slider.addEventListener('input', () => {
+                valueDisplay.textContent = slider.value;
+                applyAdjustments();
+            });
+        });
+
+        function applyAdjustments() {
+            if (!originalImage) return;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+            
+            // Draw original image
+            ctx.drawImage(originalImage, 0, 0);
+
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // Get adjustment values
+            const brightness = parseInt(document.getElementById('brightness').value);
+            const contrast = parseInt(document.getElementById('contrast').value) * 2.55;
+            const saturation = parseInt(document.getElementById('saturation').value) / 100 + 1;
+            const temperature = parseInt(document.getElementById('temperature').value);
+
+            // Apply adjustments
+            for (let i = 0; i < data.length; i += 4) {
+                // Brightness
+                data[i] += brightness;     // Red
+                data[i + 1] += brightness; // Green
+                data[i + 2] += brightness; // Blue
+
+                // Contrast
+                data[i] = ((data[i] - 128) * contrast) + 128;
+                data[i + 1] = ((data[i + 1] - 128) * contrast) + 128;
+                data[i + 2] = ((data[i + 2] - 128) * contrast) + 128;
+
+                // Temperature
+                data[i] += temperature;     // Red
+                data[i + 2] -= temperature; // Blue
+
+                // Saturation
+                const gray = 0.2989 * data[i] + 0.5870 * data[i + 1] + 0.1140 * data[i + 2];
+                data[i] = gray + (data[i] - gray) * saturation;
+                data[i + 1] = gray + (data[i + 1] - gray) * saturation;
+                data[i + 2] = gray + (data[i + 2] - gray) * saturation;
+            }
+
+            // Put image data back
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Update preview
+            imagePreview.src = canvas.toDataURL();
+        }
+
+        function resetAdjustments() {
+            controls.forEach(control => {
+                const slider = document.getElementById(control);
+                const valueDisplay = document.getElementById(control + 'Value');
+                slider.value = 0;
+                valueDisplay.textContent = '0';
+            });
+            
+            if (originalImage) {
+                imagePreview.src = originalImage.src;
+            }
+        }
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'adjusted-image.png';
+            link.href = imagePreview.src;
+            link.click();
+        }
+    </script>
+</body>
+</html> 

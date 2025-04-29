@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Filters - ImageTools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0 text-center py-4">
+                        <h1 class="h3 mb-3 text-gradient">Apply Filters</h1>
+                        <p class="text-muted mb-0">Enhance your images with professional filters</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="image-input" accept="image/*" style="display:none;">
+                                <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
+                                <h4>Drag & Drop Your Image Here</h4>
+                                <p class="text-muted">or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose File
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP</p>
+                            </div>
+                        </div>
+
+                        <!-- Filter Settings -->
+                        <div class="filter-settings mb-4" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card p-3">
+                                        <h5 class="mb-3">Filter Categories</h5>
+                                        <div class="nav flex-column nav-pills" role="tablist">
+                                            <button class="nav-link active mb-2" data-bs-toggle="pill" data-bs-target="#basic-filters">
+                                                <i class="fas fa-sliders-h me-2"></i>Basic Filters
+                                            </button>
+                                            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#color-filters">
+                                                <i class="fas fa-palette me-2"></i>Color Filters
+                                            </button>
+                                            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#artistic-filters">
+                                                <i class="fas fa-paint-brush me-2"></i>Artistic Filters
+                                            </button>
+                                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#vintage-filters">
+                                                <i class="fas fa-camera-retro me-2"></i>Vintage Filters
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card p-3">
+                                        <div class="tab-content">
+                                            <!-- Basic Filters -->
+                                            <div class="tab-pane fade show active" id="basic-filters">
+                                                <h5 class="mb-3">Basic Filters</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="grayscale">
+                                                            <img src="#" class="filter-preview mb-2" alt="Grayscale">
+                                                            <p class="mb-0">Grayscale</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="sepia">
+                                                            <img src="#" class="filter-preview mb-2" alt="Sepia">
+                                                            <p class="mb-0">Sepia</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="blur">
+                                                            <img src="#" class="filter-preview mb-2" alt="Blur">
+                                                            <p class="mb-0">Blur</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="sharpen">
+                                                            <img src="#" class="filter-preview mb-2" alt="Sharpen">
+                                                            <p class="mb-0">Sharpen</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Color Filters -->
+                                            <div class="tab-pane fade" id="color-filters">
+                                                <h5 class="mb-3">Color Filters</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="warm">
+                                                            <img src="#" class="filter-preview mb-2" alt="Warm">
+                                                            <p class="mb-0">Warm</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="cool">
+                                                            <img src="#" class="filter-preview mb-2" alt="Cool">
+                                                            <p class="mb-0">Cool</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="vibrant">
+                                                            <img src="#" class="filter-preview mb-2" alt="Vibrant">
+                                                            <p class="mb-0">Vibrant</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="muted">
+                                                            <img src="#" class="filter-preview mb-2" alt="Muted">
+                                                            <p class="mb-0">Muted</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Artistic Filters -->
+                                            <div class="tab-pane fade" id="artistic-filters">
+                                                <h5 class="mb-3">Artistic Filters</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="oil-painting">
+                                                            <img src="#" class="filter-preview mb-2" alt="Oil Painting">
+                                                            <p class="mb-0">Oil Painting</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="watercolor">
+                                                            <img src="#" class="filter-preview mb-2" alt="Watercolor">
+                                                            <p class="mb-0">Watercolor</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="sketch">
+                                                            <img src="#" class="filter-preview mb-2" alt="Sketch">
+                                                            <p class="mb-0">Sketch</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="comic">
+                                                            <img src="#" class="filter-preview mb-2" alt="Comic">
+                                                            <p class="mb-0">Comic</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Vintage Filters -->
+                                            <div class="tab-pane fade" id="vintage-filters">
+                                                <h5 class="mb-3">Vintage Filters</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="retro">
+                                                            <img src="#" class="filter-preview mb-2" alt="Retro">
+                                                            <p class="mb-0">Retro</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="vintage">
+                                                            <img src="#" class="filter-preview mb-2" alt="Vintage">
+                                                            <p class="mb-0">Vintage</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="old-photo">
+                                                            <img src="#" class="filter-preview mb-2" alt="Old Photo">
+                                                            <p class="mb-0">Old Photo</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="filter-option text-center p-2" data-filter="film">
+                                                            <img src="#" class="filter-preview mb-2" alt="Film">
+                                                            <p class="mb-0">Film</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section" style="display: none;">
+                            <h5 class="mb-3">Preview</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="preview-container mb-3">
+                                        <h6 class="text-center mb-2">Original</h6>
+                                        <div id="original-preview" class="preview-image-container"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="preview-container mb-3">
+                                        <h6 class="text-center mb-2">Filtered</h6>
+                                        <div id="filtered-preview" class="preview-image-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-success btn-lg" id="apply-btn">
+                                    <i class="fas fa-check me-2"></i>Apply Filter
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Applying filter...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { ImageFilters } from '../../../js/image-filters.js';
+        import ComponentLoader from '../../../js/component-loader.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const componentLoader = new ComponentLoader();
+            componentLoader.loadComponents();
+
+            const filters = new ImageFilters({
+                inputElement: '#image-input',
+                originalPreviewElement: '#original-preview',
+                filteredPreviewElement: '#filtered-preview',
+                filterOptions: '.filter-option',
+                applyButton: '#apply-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+        });
+    </script>
+
+    <style>
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .upload-area:hover {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .preview-container {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .preview-image-container {
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .preview-image-container img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+    }
+
+    .filter-option {
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .filter-option:hover {
+        background: rgba(var(--bs-primary-rgb), 0.05);
+    }
+
+    .filter-option.active {
+        background: rgba(var(--bs-primary-rgb), 0.1);
+        border: 1px solid var(--bs-primary);
+    }
+
+    .filter-preview {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .nav-pills .nav-link {
+        color: var(--bs-body-color);
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+
+    /* Dark Mode */
+    .dark-mode .preview-container,
+    .dark-mode .card {
+        background: #343a40;
+    }
+
+    .dark-mode .filter-option:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .filter-option.active {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--bs-primary);
+    }
+
+    .dark-mode .nav-pills .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    </style>
+</body>
+</html> 

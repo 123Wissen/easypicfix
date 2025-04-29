@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Watermark Processing - ImageTools</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Remove watermarks from multiple images at once. Process batches of images efficiently with our AI-powered watermark removal tool.">
+    <meta name="keywords" content="bulk watermark removal, batch watermark removal, multiple images, watermark remover, image processing, image tools">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/favicon.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- JSZip for downloading multiple files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../styles.css">
+
+    <style>
+    /* Upload Area */
+    .upload-area {
+        border: 2px dashed rgba(var(--bs-primary-rgb), 0.2);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .upload-area:hover,
+    .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+        transform: translateY(-2px);
+    }
+
+    /* Preview Grid */
+    .preview-container img,
+    .processing-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .preview-item,
+    .processing-item {
+        position: relative;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .preview-item:hover {
+        transform: translateY(-5px);
+    }
+
+    .preview-item .card {
+        transition: all 0.3s ease;
+    }
+
+    .preview-item:hover .card {
+        border-color: var(--bs-primary);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-item .remove-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1;
+    }
+
+    .preview-item .remove-btn:hover {
+        background: var(--bs-danger);
+        color: white;
+        transform: rotate(90deg);
+    }
+
+    /* Feature Cards */
+    .feature-card {
+        background: rgba(var(--bs-primary-rgb), 0.03);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(var(--bs-primary-rgb), 0.1);
+        cursor: pointer;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--bs-primary);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1);
+    }
+
+    .feature-icon i {
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    /* Settings Section */
+    .form-check.card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .form-check.card:hover {
+        transform: translateY(-2px);
+        border-color: var(--bs-primary);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-check-input:checked ~ .form-check-label .d-flex {
+        color: var(--bs-primary);
+    }
+
+    /* Dark Mode */
+    .dark-mode .card,
+    .dark-mode .feature-card {
+        background: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dark-mode .preview-item .remove-btn {
+        background: rgba(45, 45, 45, 0.9);
+        color: white;
+    }
+
+    .dark-mode .preview-item .remove-btn:hover {
+        background: var(--bs-danger);
+    }
+
+    .dark-mode .upload-area {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .dark-mode .upload-area:hover,
+    .dark-mode .upload-area.drag-over {
+        border-color: var(--bs-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+        background: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .dark-mode .form-control:focus,
+    .dark-mode .form-select:focus {
+        background: #2d2d2d;
+        border-color: var(--bs-primary);
+    }
+
+    .dark-mode .preview-item:hover .card {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Progress Bar */
+    .progress {
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        background: rgba(var(--bs-primary-rgb), 0.1);
+    }
+
+    .progress-bar {
+        background: var(--gradient-primary);
+        transition: width 0.3s ease;
+    }
+
+    /* Buttons */
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-primary {
+        background: var(--gradient-primary);
+        border: none;
+    }
+
+    .btn-success {
+        background: var(--gradient-success);
+        border: none;
+    }
+
+    /* Text Gradient */
+    .text-gradient {
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+    }
+
+    /* Processing Grid */
+    .processing-grid .card {
+        transition: all 0.3s ease;
+    }
+
+    .processing-grid .progress {
+        height: 5px;
+        margin-top: 0.5rem;
+        background: rgba(var(--bs-primary-rgb), 0.1);
+    }
+
+    .processing-grid .progress-bar {
+        background: var(--gradient-primary);
+    }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <div id="header-placeholder"></div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Bulk Watermark Processing</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Upload Section -->
+                        <div class="upload-section mb-4">
+                            <div class="upload-area text-center p-5">
+                                <input type="file" id="image-input" accept="image/*" multiple style="display:none;">
+                                <i class="fas fa-image fa-3x mb-3"></i>
+                                <h4>Drag & Drop Your Images Here</h4>
+                                <p>or</p>
+                                <button class="btn btn-primary btn-lg" onclick="document.getElementById('image-input').click()">
+                                    Choose Files
+                                </button>
+                                <p class="mt-3 text-muted">Supported formats: JPG, PNG, WebP</p>
+                            </div>
+                        </div>
+
+                        <!-- Settings Section -->
+                        <div class="settings-section mb-4" style="display: none;">
+                            <h5>Watermark Settings</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Operation Type</label>
+                                    <select class="form-select" id="operation-type">
+                                        <option value="add">Add Watermark</option>
+                                        <option value="remove">Remove Watermark</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Position</label>
+                                    <select class="form-select" id="position">
+                                        <option value="center">Center</option>
+                                        <option value="top-left">Top Left</option>
+                                        <option value="top-right">Top Right</option>
+                                        <option value="bottom-left">Bottom Left</option>
+                                        <option value="bottom-right">Bottom Right</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Opacity</label>
+                                    <input type="range" class="form-range" id="opacity" min="1" max="100" value="50">
+                                    <div class="text-center"><span id="opacity-value">50</span>%</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Quality</label>
+                                    <input type="range" class="form-range" id="quality" min="1" max="100" value="90">
+                                    <div class="text-center"><span id="quality-value">90</span>%</div>
+                                </div>
+
+                                <!-- Add Watermark Settings -->
+                                <div id="add-settings" class="col-12">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Watermark Type</label>
+                                            <select class="form-select" id="watermark-type">
+                                                <option value="text">Text Watermark</option>
+                                                <option value="image">Image Watermark</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Size</label>
+                                            <input type="range" class="form-range" id="size" min="1" max="100" value="30">
+                                            <div class="text-center"><span id="size-value">30</span>%</div>
+                                        </div>
+                                        <!-- Text Watermark Options -->
+                                        <div id="text-options" class="col-12">
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <label class="form-label">Watermark Text</label>
+                                                    <input type="text" class="form-control" id="watermark-text" placeholder="Enter your watermark text">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Text Color</label>
+                                                    <input type="color" class="form-control form-control-color w-100" id="text-color" value="#ffffff">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Image Watermark Options -->
+                                        <div id="image-options" class="col-12" style="display: none;">
+                                            <div class="mb-3">
+                                                <label class="form-label">Watermark Image</label>
+                                                <input type="file" class="form-control" id="watermark-image" accept="image/*">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Remove Watermark Settings -->
+                                <div id="remove-settings" class="col-12" style="display: none;">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Removal Method</label>
+                                            <select class="form-select" id="removal-method">
+                                                <option value="auto">Automatic Detection</option>
+                                                <option value="manual">Manual Selection</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Intensity</label>
+                                            <input type="range" class="form-range" id="intensity" min="1" max="100" value="50">
+                                            <div class="text-center"><span id="intensity-value">50</span>%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="preview-section" style="display: none;">
+                            <h5>Preview</h5>
+                            <div id="image-preview" class="row g-3"></div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-success" id="process-btn">
+                                    <i class="fas fa-magic me-2"></i>Process Images
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Section -->
+                        <div class="progress-section mt-4" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <span id="progress-text">Processing images...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script type="module">
+        import { BulkWatermarkProcessor } from '../../js/bulk-watermark-processor.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const processor = new BulkWatermarkProcessor({
+                inputElement: '#image-input',
+                previewElement: '#image-preview',
+                operationTypeElement: '#operation-type',
+                watermarkTypeElement: '#watermark-type',
+                watermarkTextElement: '#watermark-text',
+                watermarkImageElement: '#watermark-image',
+                textColorElement: '#text-color',
+                positionElement: '#position',
+                opacityElement: '#opacity',
+                opacityValueElement: '#opacity-value',
+                qualityElement: '#quality',
+                qualityValueElement: '#quality-value',
+                sizeElement: '#size',
+                sizeValueElement: '#size-value',
+                removalMethodElement: '#removal-method',
+                intensityElement: '#intensity',
+                intensityValueElement: '#intensity-value',
+                processButton: '#process-btn',
+                progressBar: '.progress-bar',
+                progressText: '#progress-text'
+            });
+
+            // Toggle settings based on operation type
+            document.querySelector('#operation-type').addEventListener('change', (e) => {
+                const addSettings = document.querySelector('#add-settings');
+                const removeSettings = document.querySelector('#remove-settings');
+                if (e.target.value === 'add') {
+                    addSettings.style.display = 'block';
+                    removeSettings.style.display = 'none';
+                } else {
+                    addSettings.style.display = 'none';
+                    removeSettings.style.display = 'block';
+                }
+            });
+
+            // Toggle watermark type settings
+            document.querySelector('#watermark-type').addEventListener('change', (e) => {
+                const textOptions = document.querySelector('#text-options');
+                const imageOptions = document.querySelector('#image-options');
+                if (e.target.value === 'text') {
+                    textOptions.style.display = 'block';
+                    imageOptions.style.display = 'none';
+                } else {
+                    textOptions.style.display = 'none';
+                    imageOptions.style.display = 'block';
+                }
+            });
+
+            // Load header and footer
+            fetch('../../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-placeholder').innerHTML = data;
+                });
+
+            fetch('../../components/footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                });
+        });
+    </script>
+</body>
+</html> 
